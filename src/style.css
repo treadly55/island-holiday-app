@@ -1,3 +1,5 @@
+/* src/style.css */
+
 /* Reset default margins/padding for simplicity */
 body, h1, fieldset, div, p, form {
   margin: 0;
@@ -9,23 +11,32 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   padding: 20px;
   line-height: 1.6;
+  background-color: #f0f4f8; /* Light background for the page */
 }
 
 #app {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto; /* Add some top/bottom margin */
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Add space between elements */
+  gap: 25px; /* Increase space between form and results */
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50; /* Darker blue */
+    margin-bottom: 15px;
 }
 
 form {
-  display: flex;
+  display: flex; /* Use flex for form layout */
   flex-direction: column;
-  gap: 15px; /* Space between fieldsets */
+  gap: 20px; /* Space between fieldsets */
   border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 5px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
 }
 
 fieldset {
@@ -34,12 +45,14 @@ fieldset {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Space within fieldsets */
+  gap: 10px; /* Space within fieldsets */
 }
 
 legend {
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  color: #34495e; /* Slightly darker legend text */
+  font-size: 1.1em;
 }
 
 /* Style radio/checkbox groups */
@@ -49,28 +62,67 @@ fieldset > div {
   gap: 8px;
 }
 
+label {
+    cursor: pointer; /* Make labels clickable */
+}
+
+input[type="range"] {
+    cursor: pointer;
+}
+
+#luxury-value {
+    font-weight: bold;
+    color: #007bff;
+    min-width: 20px; /* Ensure space for value */
+    text-align: right;
+}
+
 button[type="submit"] {
-  padding: 10px 15px;
+  padding: 12px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  margin-top: 10px; /* Add space above button */
 }
 
 button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
+/* --- Card Styling for Results --- */
 #results {
-    border: 1px solid #eee;
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 20px;
-    background-color: #f9f9f9;
+  border: 1px solid #ddd; /* Light border */
+  padding: 25px;          /* More padding */
+  border-radius: 8px;     /* Rounded corners */
+  margin-top: 0; /* Removed margin-top as #app gap handles spacing */
+  background-color: #ffffff; /* White background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
+  /* Results div starts hidden until first result/error */
+  display: none;
 }
 
 #results h2 {
-    margin-bottom: 10px;
+  margin-top: 0; /* Remove default top margin */
+  margin-bottom: 15px; /* Space below heading */
+  color: #333; /* Darker heading color */
+  font-size: 1.3em;
+}
+
+#recommendation-text {
+    white-space: pre-wrap; /* Respect newlines from the AI response */
+    color: #555; /* Slightly lighter text color */
+    line-height: 1.7; /* Slightly taller line height for readability */
+}
+
+#loading-indicator {
+    font-style: italic;
+    color: #555;
+    text-align: center;
+    padding: 20px 0;
+    /* Loading indicator is initially hidden via inline style */
+    /* display: none; */
 }

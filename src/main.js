@@ -1,5 +1,6 @@
 // src/main.js
 // Updated to call the Netlify serverless function
+// Includes logic to hide form and show results card on success
 
 import './style.css';
 // No longer importing Supabase or OpenAI clients here
@@ -42,8 +43,10 @@ if (form) {
         // --- End Validation ---
 
         // --- UI Update: Start Loading ---
-        recommendationText.textContent = ''; // Clear previous results
-        loadingIndicator.style.display = 'block'; // Show "Thinking..."
+        recommendationText.textContent = ''; // Clear previous results text
+        resultsDiv.style.display = 'none';   // Hide results card initially (in case it was visible from error)
+        form.style.display = 'block';      // Ensure form is visible at start
+        loadingIndicator.style.display = 'block'; // Show "Thinking..." within the form/app structure
 
         // --- Create Preferences Object to Send ---
         const preferences = {
@@ -83,26 +86,34 @@ if (form) {
             const data = await response.json();
             const recommendation = data.recommendation;
 
-            // Display Result in UI
-            recommendationText.textContent = recommendation;
+            // --- SUCCESS: Update UI ---
+            recommendationText.textContent = recommendation; // Display Result text
+            form.style.display = 'none';              // Hide the form
+            resultsDiv.style.display = 'block';         // Show the results card
+
             console.log("--- Netlify Function Call Successful ---");
             console.log("Received Recommendation:", recommendation);
 
 
         } catch (error) {
-            // Display error in UI
+            // --- ERROR: Update UI ---
             console.error("Error calling Netlify function:", error);
-            recommendationText.textContent = `Sorry, an error occurred: ${error.message}`;
+            recommendationText.textContent = `Sorry, an error occurred: ${error.message}`; // Display error text
+            form.style.display = 'block';      // Ensure form is visible to allow retry
+            resultsDiv.style.display = 'block';  // Show the results card (to display the error message)
+
         } finally {
             // --- UI Update: Stop Loading ---
-            loadingIndicator.style.display = 'none'; // Hide "Thinking..."
+            // Hide loading indicator regardless of success or error
+            loadingIndicator.style.display = 'none';
         }
         // === End Serverless Function Call ===
 
     }); // End of form submit handler
 } // End of if(form)
 
-
+// === Core RAG Logic Functions & Test Execution Comments ===
+// (Keep comments as they were in your working version)
 // === Core RAG Logic Functions (embedQuery, searchChunks, generateFinalResponse) ===
 // These are now REMOVED from main.js as they live in netlify/functions/get-recommendation.js
 

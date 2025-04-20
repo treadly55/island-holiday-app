@@ -2,18 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/icon.svg" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/style.css"> <title>My next island holiday!</title> </head>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/style.css"> <title>My next island holiday!</title>
+  </head>
   <body>
     <div id="app">
       <h1>My next island holiday!</h1>
-      <form id="planner-form">
 
+      <form id="planner-form">
         <fieldset>
           <legend>Luxury Level (1=Rustic, 10=Ultra Luxury):</legend>
           <label for="luxury-scale">Level:</label>
           <input type="range" id="luxury-scale" name="luxuryScale" min="1" max="10" value="5">
-          <span id="luxury-value">5</span> </fieldset>
+          <span id="luxury-value">5</span>
+        </fieldset>
 
         <fieldset>
           <legend>Preferred Island Vibe:</legend>
@@ -26,7 +29,8 @@
             <label for="vibe-jungle">Jungle/Rainforest</label>
           </div>
           <div>
-            <input type="radio" id="vibe-palms" name="vibe" value="Tropical Palms"> <label for="vibe-palms">Tropical Palms & Resorts</label>
+            <input type="radio" id="vibe-palms" name="vibe" value="Tropical Palms">
+            <label for="vibe-palms">Tropical Palms & Resorts</label>
           </div>
           <div>
             <input type="radio" id="vibe-volcanic" name="vibe" value="Volcanic/Mountainous">
@@ -55,7 +59,6 @@
         </fieldset>
 
         <button type="submit">Find My Island!</button>
-
       </form>
 
       <div id="results">
@@ -65,6 +68,5 @@
       </div>
 
     </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <script type="module" src="/src/main.js"></script> </body>
 </html>
