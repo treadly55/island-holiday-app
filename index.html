@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css"> <title>My next island holiday!</title> </head>
+  <body>
+    <div id="app">
+      <h1>My next island holiday!</h1>
+      <form id="planner-form">
+
+        <fieldset>
+          <legend>Luxury Level (1=Rustic, 10=Ultra Luxury):</legend>
+          <label for="luxury-scale">Level:</label>
+          <input type="range" id="luxury-scale" name="luxuryScale" min="1" max="10" value="5">
+          <span id="luxury-value">5</span> </fieldset>
+
+        <fieldset>
+          <legend>Preferred Island Vibe:</legend>
+          <div>
+            <input type="radio" id="vibe-beach" name="vibe" value="Beach" checked>
+            <label for="vibe-beach">Beach Focused</label>
+          </div>
+          <div>
+            <input type="radio" id="vibe-jungle" name="vibe" value="Jungle">
+            <label for="vibe-jungle">Jungle/Rainforest</label>
+          </div>
+          <div>
+            <input type="radio" id="vibe-palms" name="vibe" value="Tropical Palms"> <label for="vibe-palms">Tropical Palms & Resorts</label>
+          </div>
+          <div>
+            <input type="radio" id="vibe-volcanic" name="vibe" value="Volcanic/Mountainous">
+            <label for="vibe-volcanic">Volcanic/Mountainous</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Main Activity Interests (Select all that apply):</legend>
+          <div>
+            <input type="checkbox" id="interest-relaxing" name="interests" value="Relaxing">
+            <label for="interest-relaxing">Relaxing / Spa</label>
+          </div>
+          <div>
+            <input type="checkbox" id="interest-cultural" name="interests" value="Cultural">
+            <label for="interest-cultural">Cultural / Historical</label>
+          </div>
+          <div>
+            <input type="checkbox" id="interest-romance" name="interests" value="Romance">
+            <label for="interest-romance">Romance / Couples</label>
+          </div>
+          <div>
+            <input type="checkbox" id="interest-adventure" name="interests" value="Outdoor Adventure">
+            <label for="interest-adventure">Outdoor Adventure / Sports</label>
+          </div>
+        </fieldset>
+
+        <button type="submit">Find My Island!</button>
+
+      </form>
+
+      <div id="results">
+        <h2>Your Recommendation:</h2>
+        <p id="loading-indicator" style="display: none;">Thinking...</p>
+        <p id="recommendation-text"></p>
+      </div>
+
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
