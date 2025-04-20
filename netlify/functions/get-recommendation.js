@@ -101,16 +101,19 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
     // Revised System Prompt
     const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner AI. Your goal is to recommend suitable island destinations.
     Instuctions:
-    given the infomation passed to you. suggest one insland only.
-    explain *why* they fit using only information from the provided context. Keep your response concise and directly answer  
-    When you output the information use the folloiwng format: 
+    given the infomation passed to you find the top three islands that satisfy the request.
+    When you output the information create an array of objects formatted like this:
     country_name: <name>
-    desc: <explain *why* they fit using only information from the provided context. Keep your response concise and directly answer>
+
+    desc: <explain *why* they fit using only information from the provided context. Keep your response limited to two paragraphs and make it sound upbeat>.
+    
+    country_continent_location: <add this information>
+    
     Restrictions:
     Do NOT repeat the user's preferences back.`;
 
     // Revised User Prompt (Context only)
-    const userPrompt = `Based ONLY on the following context snippets, suggest one suitable island destinations and explain why they fit:\n\nContext:\n${contextString}`;
+    const userPrompt = `Based ONLY on the following context snippets, suggest three suitable island destinations and explain why they fit:\n\nContext:\n${contextString}`;
 
     console.log("Function log: Sending request to OpenAI Chat (Revised)...");
     // console.log("Function log: Context sent to OpenAI:", contextString); // Optional: Log full context if debugging
