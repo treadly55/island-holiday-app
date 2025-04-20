@@ -99,17 +99,25 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
 
 
     // Revised System Prompt
-    const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner AI. Your goal is to recommend suitable island destinations based ONLY on the context provided from island descriptions and the user's stated preferences (which you should infer from the context and the initial query used to find this context). Do NOT repeat the user's preferences back to them unless it's essential for clarifying the recommendation. Suggest one or two destinations, mention the names clearly, and briefly explain *why* they fit using only information from the provided context. Keep your response concise and directly answer the implied request for a recommendation. Be positive and inviting.`;
+    const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner AI. Your goal is to recommend suitable island destinations.
+    Instuctions:
+    given the infomation passed to you. suggest one insland only.
+    explain *why* they fit using only information from the provided context. Keep your response concise and directly answer  
+    When you output the information use the folloiwng format: 
+    country_name: <name>
+    desc: <explain *why* they fit using only information from the provided context. Keep your response concise and directly answer>
+    Restrictions:
+    Do NOT repeat the user's preferences back.`;
 
     // Revised User Prompt (Context only)
-    const userPrompt = `Based ONLY on the following context snippets, suggest one or two suitable island destinations and explain why they fit:\n\nContext:\n${contextString}`;
+    const userPrompt = `Based ONLY on the following context snippets, suggest one suitable island destinations and explain why they fit:\n\nContext:\n${contextString}`;
 
     console.log("Function log: Sending request to OpenAI Chat (Revised)...");
     // console.log("Function log: Context sent to OpenAI:", contextString); // Optional: Log full context if debugging
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4-turbo", // Using specified model
+            model: "gpt-4o", // Using specified model
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt }
