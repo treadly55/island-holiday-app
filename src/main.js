@@ -6,9 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 
 // === INITIALIZE CLIENTS (using Vite env variables) ===
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
 
 // Basic validation on load
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !OPENAI_API_KEY) {

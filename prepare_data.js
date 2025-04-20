@@ -16,11 +16,7 @@ const SUPABASE_TABLE_NAME = 'island_chunks';
 const CHUNK_SIZE = 500;
 const CHUNK_OVERLAP = 50;
 
-// --- Get Credentials from Environment Variables ---
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-// Use ANON_KEY if RLS allows insert, otherwise use SERVICE_KEY for this script.
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY; // Or process.env.SUPABASE_SERVICE_KEY
+
 
 // --- Validate Credentials ---
 if (!OPENAI_API_KEY || !SUPABASE_URL || !SUPABASE_KEY) {
