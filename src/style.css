@@ -106,36 +106,38 @@ button[type="submit"]:hover {
 
 /* Styling for the Results Heading Box */
 #results-heading {
-  display: flex; /* Enable flexbox */
-  justify-content: space-between; /* Push title left, icon right */
-  align-items: center; /* Vertically center items */
-  padding: 10px 15px; /* Padding inside the box */
-  margin-bottom: 20px; /* Space below heading box */
-  border: 1px solid #ccc; /* Border for the box */
-  border-radius: 6px; /* Rounded corners */
-  background-color: #f8f9fa; /* Light background for the box */
-  color: #333; /* Text color */
-  font-size: 1.2em; /* Adjust font size if needed */
+  display: flex; /* Still use flexbox */
+  /* justify-content: space-between; */ /* REMOVED this */
+  align-items: center; /* Keep items vertically centered */
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 1.2em;
+  position: relative; /* Needed if absolute positioning were used, but good practice */
 }
 
 /* Style for the title text span */
 #results-title {
   flex-grow: 1; /* Allow title to take up available space */
-  margin-right: 10px; /* Add some space between title and icon */
+  text-align: center; /* Center the text WITHIN this span */
 }
 
 /* Styling for the Back Icon */
 #back-to-form-button {
   flex-shrink: 0; /* Prevent icon from shrinking */
-  font-size: 1.1em; /* Adjust icon size */
-  color: #007bff; /* Use a theme color */
+  margin-right: 15px; /* Add space between icon and title */
+  font-size: 1.1em;
+  color: #007bff;
   cursor: pointer;
-  padding: 5px; /* Add padding for easier clicking */
+  padding: 5px;
   transition: color 0.2s ease;
 }
 
 #back-to-form-button:hover {
-  color: #0056b3; /* Darker color on hover */
+  color: #0056b3;
 }
 
 /* Container for cards */
