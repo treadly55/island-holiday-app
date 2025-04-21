@@ -1,7 +1,7 @@
 /* src/style.css */
 
 /* Reset default margins/padding for simplicity */
-body, h1, fieldset, div, p, form {
+body, h1, h2, h3, fieldset, div, p, form {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -55,7 +55,6 @@ legend {
   font-size: 1.1em;
 }
 
-/* Style radio/checkbox groups */
 fieldset > div {
   display: flex;
   align-items: center;
@@ -93,36 +92,66 @@ button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-/* --- Card Styling for Results --- */
+/* --- Styling for Results Area --- */
 #results {
-  border: 1px solid #ddd; /* Light border */
-  padding: 25px;          /* More padding */
-  border-radius: 8px;     /* Rounded corners */
-  margin-top: 0; /* Removed margin-top as #app gap handles spacing */
-  background-color: #ffffff; /* White background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
-  /* Results div starts hidden until first result/error */
+  /* No border/padding here directly, apply to cards */
+  margin-top: 0;
+  width: 100%; /* Ensure it takes available width */
+  /* Starts hidden, shown by JS */
   display: none;
 }
 
 #results h2 {
-  margin-top: 0; /* Remove default top margin */
   margin-bottom: 15px; /* Space below heading */
-  color: #333; /* Darker heading color */
+  color: #333;
   font-size: 1.3em;
+  text-align: center; /* Center the main results heading */
 }
 
-#recommendation-text {
-    white-space: pre-wrap; /* Respect newlines from the AI response */
-    color: #555; /* Slightly lighter text color */
-    line-height: 1.7; /* Slightly taller line height for readability */
+/* --- Styling for Individual Island Cards --- */
+.island-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px; /* Space between cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
+.island-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #0056b3; /* Use theme color for card titles */
+  font-size: 1.2em;
+}
+
+.island-card p.description {
+  margin-bottom: 10px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.island-card p.location {
+  font-size: 0.9em;
+  color: #777;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+/* --- Loading and Error Styling --- */
 #loading-indicator {
     font-style: italic;
     color: #555;
     text-align: center;
     padding: 20px 0;
-    /* Loading indicator is initially hidden via inline style */
-    /* display: none; */
+    /* display: none; set inline by JS */
+}
+
+.error-message {
+    color: #dc3545; /* Bootstrap danger color */
+    background-color: #f8d7da; /* Light pink background */
+    border: 1px solid #f5c6cb; /* Reddish border */
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
 }

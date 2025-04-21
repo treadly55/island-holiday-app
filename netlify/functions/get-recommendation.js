@@ -76,58 +76,64 @@ async function searchChunks(queryEmbedding) {
 }
 
 // Function 3: Generate Final Response (Revised Prompts)
+// This function receives relevantChunks and generates the raw string response
 async function generateFinalResponse(relevantChunks, userPreferences) {
     console.log("Function log: Generating final recommendation (Revised Prompts)...");
     if (!openai) throw new Error("OpenAI client not initialized in function.");
 
     if (!relevantChunks || relevantChunks.length === 0) {
-        console.log("Function log: No relevant chunks provided.");
-        return "Based on the information I have, I couldn't find a specific island that perfectly matches all your preferences right now. Perhaps try adjusting your selections?";
+        console.log("Function log: No relevant chunks provided, returning default message string.");
+        // Returning a string that looks like the expected JSON structure for consistency,
+        // although it indicates no specific match was found.
+        return '```json\n[\n {\n  "country_name": "No specific match",\n  "desc": "Based on the information I have, I couldn\'t find a specific island that perfectly matches all your preferences right now. Perhaps try adjusting your selections?",\n  "country_continent_location": "Unknown"\n }\n]\n```';
     }
 
     const contextString = relevantChunks
         .map((chunk, index) => `Context Chunk ${index+1} (from ${chunk.destination}):\n${chunk.chunk_text}`)
         .join("\n\n---\n\n");
 
-    // Preferences are used by the system prompt's instructions, but not explicitly inserted into user prompt anymore
     let luxuryDesc = "comfortable";
     if (userPreferences.luxuryScale <= 3) luxuryDesc = "rustic";
     else if (userPreferences.luxuryScale >= 8) luxuryDesc = "luxurious";
-    // We can still formulate this for logging or potential future use if needed
     const preferencesSummaryForLog = `User looking for: ${luxuryDesc} (Scale: ${userPreferences.luxuryScale}/10), Vibe: ${userPreferences.vibe}, Interests: ${userPreferences.interests.join(', ')}.`;
     console.log("Function log: User Preferences Summary: ", preferencesSummaryForLog);
 
 
-    // Revised System Prompt
-    const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner AI. Your goal is to recommend suitable island destinations.
-    Instuctions:
-    given the infomation passed to you find the top three islands that satisfy the request.
-    When you output the information create an array of objects formatted like this:
-    country_name: <name>
+    // Revised System Prompt - Ask specifically for JSON output
+    const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner AI.
+    Instructions:
+    Based *only* on the provided context chunks, suggest one to three suitable island destinations that best match the user's implied needs from the context.
+    Explain *why* each fits using only information from the provided context snippets. Keep explanations concise.
+    Format your entire response as a single JSON array of objects. Each object MUST have the keys "country_name", "desc", and "country_continent_location". Do not include any text outside the JSON array structure.
 
-    desc: <explain *why* they fit using only information from the provided context. Keep your response limited to two paragraphs and make it sound upbeat>.
-    
-    country_continent_location: <add this information>
-    
-    Restrictions:
-    Do NOT repeat the user's preferences back.`;
+    Example JSON format:
+    [
+      {
+        "country_name": "Island Name, Country",
+        "desc": "Explanation based on context...",
+        "country_continent_location": "Continent/Region based on context or general knowledge"
+      }
+    ]`;
+    // Removed the specific country_name/desc format instruction as it's now part of the JSON structure request.
 
     // Revised User Prompt (Context only)
-    const userPrompt = `Based ONLY on the following context snippets, suggest three suitable island destinations and explain why they fit:\n\nContext:\n${contextString}`;
+    const userPrompt = `Context:\n${contextString}`;
 
-    console.log("Function log: Sending request to OpenAI Chat (Revised)...");
-    // console.log("Function log: Context sent to OpenAI:", contextString); // Optional: Log full context if debugging
+    console.log("Function log: Sending request to OpenAI Chat for JSON output...");
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o", // Using specified model
+            model: "gpt-4-turbo", // Ensure model supports JSON mode if needed, or rely on prompt.
+            // Optional: Enable JSON mode if using compatible models like gpt-4-1106-preview or gpt-3.5-turbo-1106
+            // response_format: { type: "json_object" }, // Note: Might require adjustments to prompt structure if enabled
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt }
             ],
-            temperature: 0.6, // Slightly reduced creativity
+            temperature: 0.5, // Slightly lower temperature for more predictable JSON
         });
 
+        // Return the raw content string, which should ideally be the JSON array string
         const recommendation = completion.choices[0].message.content;
         console.log("Function log: OpenAI Chat Response received.");
         return recommendation;
@@ -145,12 +151,12 @@ exports.handler = async (event, context) => {
 
     // Check if clients initialized properly
      if (!supabase || !openai) {
-         console.error("Function log: Server configuration error - Supabase or OpenAI client not initialized.");
-         return {
+       console.error("Function log: Server configuration error - Supabase or OpenAI client not initialized.");
+       return {
              statusCode: 500,
              body: JSON.stringify({ error: "Server configuration error. Please check function logs." }),
              headers: { 'Content-Type': 'application/json' },
-         };
+       };
      }
 
     // Only allow POST requests for this function
@@ -167,7 +173,6 @@ exports.handler = async (event, context) => {
         }
         const preferences = JSON.parse(event.body);
         console.log("Function log: Received preferences:", preferences);
-        // Add basic validation for received preferences if necessary
         if (!preferences || !preferences.luxuryScale || !preferences.vibe || !preferences.interests) {
              throw new Error("Invalid or incomplete preferences received.");
         }
@@ -179,28 +184,60 @@ exports.handler = async (event, context) => {
         else if (preferences.luxuryScale >= 8) luxuryDesc = "luxurious";
         const interestsString = preferences.interests.join(', ');
         const querySentence = `Seeking a ${luxuryDesc} destination with a ${preferences.vibe} vibe, interested in activities like ${interestsString}.`;
-        // Not logging the full sentence here anymore, embedQuery will log start of it.
 
-        // 3. Run the RAG pipeline
+
+        // 3. Run the RAG pipeline - ENSURE CORRECT ORDER AND VARIABLE NAMES
         const queryEmbedding = await embedQuery(querySentence);
-        const relevantChunks = await searchChunks(queryEmbedding);
-        const recommendation = await generateFinalResponse(relevantChunks, preferences);
 
-        console.log("Function log: Recommendation generated successfully.");
-        // 4. Return Success Response
+        // *** ENSURE THIS LINE IS PRESENT AND CORRECT ***
+        const relevantChunks = await searchChunks(queryEmbedding);
+        // *** ADDED DIAGNOSTIC LOG ***
+        console.log("Function log: searchChunks returned:", relevantChunks);
+
+        // *** ENSURE relevantChunks IS USED CORRECTLY HERE ***
+        const rawRecommendationString = await generateFinalResponse(relevantChunks, preferences);
+        console.log("Function log: Received raw string from LLM.");
+
+
+        // 4. Extract and Parse JSON from the raw string
+        let parsedRecommendationArray;
+        try {
+            const match = rawRecommendationString.match(/```json\s*([\s\S]*?)\s*```/);
+
+            if (match && match[1]) {
+                const jsonString = match[1];
+                parsedRecommendationArray = JSON.parse(jsonString);
+                console.log("Function log: Extracted and parsed JSON from markdown block.");
+            } else {
+                console.log("Function log: No JSON markdown block found, attempting direct parse.");
+                parsedRecommendationArray = JSON.parse(rawRecommendationString);
+            }
+
+            if (!Array.isArray(parsedRecommendationArray)) {
+                 console.warn("Function log: Parsed content is not an array. Raw string:", rawRecommendationString);
+                 throw new Error("Parsed content from LLM is not an array.");
+            }
+
+        } catch (parseError) {
+            console.error("Function log: Error parsing LLM response string:", parseError);
+            console.error("Raw string that failed parsing:", rawRecommendationString);
+            throw new Error(`Failed to parse recommendation JSON from LLM output.`);
+        }
+
+        console.log("Function log: Recommendation parsed successfully.");
+        // 5. Return Success Response (using the PARSED array)
         return {
             statusCode: 200,
-            body: JSON.stringify({ recommendation: recommendation }), // Send recommendation back in JSON object
+            body: JSON.stringify({ recommendation: parsedRecommendationArray }), // Use parsed array
             headers: { 'Content-Type': 'application/json' },
         };
 
-    } catch (error) {
+    } catch (error) { // Outer catch block catches errors from steps 1-4
         console.error('Function log: Error in handler:', error);
         // Return Error Response
         return {
             statusCode: 500,
-            // Return the specific error message for better frontend debugging if needed
-            body: JSON.stringify({ error: `Failed to get recommendation: ${error.message}` }),
+            body: JSON.stringify({ error: `Failed to get recommendation: ${error.message}` }), // Include error message
             headers: { 'Content-Type': 'application/json' },
         };
     }
