@@ -101,17 +101,44 @@ button[type="submit"]:hover {
 #results {
   /* Styles for the container itself (if any) */
   width: 100%;
-  /* display: none; is now handled by inline style & JS */
+  /* display: none; is handled by inline style & JS */
 }
 
-#results h2 {
-  margin-bottom: 15px; /* Space below heading */
-  color: #333;
-  font-size: 1.3em;
-  text-align: center; /* Center the main results heading */
+/* Styling for the Results Heading Box */
+#results-heading {
+  display: flex; /* Enable flexbox */
+  justify-content: space-between; /* Push title left, icon right */
+  align-items: center; /* Vertically center items */
+  padding: 10px 15px; /* Padding inside the box */
+  margin-bottom: 20px; /* Space below heading box */
+  border: 1px solid #ccc; /* Border for the box */
+  border-radius: 6px; /* Rounded corners */
+  background-color: #f8f9fa; /* Light background for the box */
+  color: #333; /* Text color */
+  font-size: 1.2em; /* Adjust font size if needed */
 }
 
-/* NEW: Container for cards doesn't need specific styles now */
+/* Style for the title text span */
+#results-title {
+  flex-grow: 1; /* Allow title to take up available space */
+  margin-right: 10px; /* Add some space between title and icon */
+}
+
+/* Styling for the Back Icon */
+#back-to-form-button {
+  flex-shrink: 0; /* Prevent icon from shrinking */
+  font-size: 1.1em; /* Adjust icon size */
+  color: #007bff; /* Use a theme color */
+  cursor: pointer;
+  padding: 5px; /* Add padding for easier clicking */
+  transition: color 0.2s ease;
+}
+
+#back-to-form-button:hover {
+  color: #0056b3; /* Darker color on hover */
+}
+
+/* Container for cards */
 #card-container {
   /* No specific styles needed unless for layout */
 }
@@ -122,18 +149,18 @@ button[type="submit"]:hover {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 20px; /* Space between cards (though only one visible) */
+  margin-bottom: 20px; /* Space below card (relevant if multiple were visible) */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  /* === NEW: Hide cards by default === */
+  /* Hide cards by default */
   display: none;
 }
 
-/* === NEW: Class to show the active card === */
+/* Class to show the active card */
 .island-card.visible {
   display: block;
 }
 
-
+/* Styles for content within cards */
 .island-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
