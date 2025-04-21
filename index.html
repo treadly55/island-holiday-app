@@ -61,10 +61,17 @@
         <button type="submit">Find My Island!</button>
       </form>
 
-      <div id="results">
-        <h2>Your Recommendation:</h2>
+      <div id="results" style="display: none;"> <h2>Your Recommendation:</h2>
         <div id="loading-indicator" style="display: none;">Thinking...</div>
-        </div>
+
+        <div id="card-container">
+          </div>
+
+        <button id="next-card-button" class="full-width-button" style="display: none;">
+          Next
+        </button>
+
+      </div>
 
     </div>
     <script type="module" src="/src/main.js"></script> </body>
