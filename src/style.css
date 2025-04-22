@@ -9,9 +9,15 @@ body, h1, h2, h3, fieldset, div, p, form, button { /* Added button to reset */
   font-family: inherit;
 }
 
+/* Ensure html and body take full height for overlay */
+html, body {
+  height: 100%;
+  /* Removed margin/padding from here as it's reset above */
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  padding: 20px;
+  padding: 20px; /* Padding for main content, overlay ignores this */
   line-height: 1.6;
   background-color: #f0f4f8; /* Light background for the page */
 }
@@ -25,9 +31,9 @@ body {
 }
 
 h1 {
-    text-align: center;
-    color: #2c3e50; /* Darker blue */
-    margin-bottom: 15px;
+  text-align: center;
+  color: #2c3e50; /* Darker blue */
+  margin-bottom: 15px;
 }
 
 /* --- Loading Overlay Styles --- */
@@ -36,14 +42,14 @@ h1 {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; /* Needs parent (html, body) height */
   background-color: rgba(0, 0, 0, 0.75); /* Dark semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000; /* Ensure it's on top of everything */
-  opacity: 0; /* Start fully transparent */
-  visibility: hidden; /* Start hidden and non-interactive */
+  display: flex;          /* Use flexbox to center the child */
+  justify-content: center; /* Center .content-wrapper horizontally */
+  align-items: center;     /* Center .content-wrapper vertically */
+  z-index: 10000;          /* Ensure it's on top of everything */
+  opacity: 0;              /* Start fully transparent */
+  visibility: hidden;
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s; /* Fade out opacity, hide visibility AFTER fade */
 }
 
@@ -53,11 +59,48 @@ h1 {
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0s; /* Fade in opacity, show visibility immediately */
 }
 
-.loading-text {
-  color: white;
-  font-size: 1.8em;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+/* Wrapper for the text and loader to group them */
+.content-wrapper {
+  display: flex;          /* Arrange its children (text, loader) using flexbox */
+  align-items: baseline;  /* Align the text and loader on their baseline */
+}
+
+#status-words {
+  font-size: 30px;
+  color: #fefefe;
+  padding-right: 10px;
+  /* align-self removed - alignment handled by .content-wrapper */
+  /* 'top: 2px' removed - it requires position:relative to work */
+  /* --- Optional Finesse --- */
+  /* For fine-tuning vertical alignment AFTER baseline: */
+  /* position: relative; */
+  /* top: 1px; /* Example: nudge down slightly */
+  /* --- End Optional Finesse --- */
+}
+
+.loader {
+  width: 30px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side,#fefefe 90%,#0000);
+  background:
+    var(--_g) 0%   50%,
+    var(--_g) 50%  50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100%/3) 50%;
+  animation: l3 1s infinite linear;
+  /* align-self removed - alignment handled by .content-wrapper */
+  vertical-align: baseline; /* Keep for potential cross-browser help */
+   /* --- Optional Finesse (Apply to one element only) --- */
+  /* position: relative; */
+  /* top: -1px; /* Example: nudge up slightly if adjusting loader */
+  /* --- End Optional Finesse --- */
+}
+
+@keyframes l3 {
+    20%{background-position:0%   0%, 50%  50%,100%  50%}
+    40%{background-position:0% 100%, 50%   0%,100%  50%}
+    60%{background-position:0%  50%, 50% 100%,100%   0%}
+    80%{background-position:0%  50%, 50%  50%,100% 100%}
 }
 
 
@@ -163,9 +206,20 @@ button[type="submit"]:hover {
 }
 
 /* Style for the title text span */
-#results-title {
-  flex-grow: 1; /* Allow title to take up available space */
-  text-align: center; /* Center the text WITHIN this span */
+/* Duplicated rules removed, kept the combined one */
+#results-heading { display: flex; align-items: center; padding: 10px 15px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; background-color: #f8f9fa; color: #333; font-size: 1.2em; position: relative; }
+#back-to-form-button { flex-shrink: 0; margin-right: 15px; font-size: 1.1em; color: #007bff; cursor: pointer; padding: 5px; transition: color 0.2s ease; }
+#back-to-form-button:hover { color: #0056b3; }
+#results-title { flex-grow: 1; text-align: center; }
+
+/* === NEW: Style for Dynamic Title === */
+#current-recommendation-title {
+  margin-bottom: 15px; /* Space below this title, above the card */
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #495057;
+  /* text-align: center; */ /* Handled by inline style, or move here */
+  /* display: none; */ /* Handled by inline style & JS */
 }
 
 /* Container for cards */
@@ -175,14 +229,11 @@ button[type="submit"]:hover {
 
 /* --- Styling for Individual Island Cards --- */
 .island-card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px; /* Space below card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  /* Hide cards by default */
-  display: none;
+  background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 20px; /* Reset padding-top if changed before */
+  /* position: relative; */ /* No longer needed for number badge */
+  margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  display: none; /* Hide cards by default */
 }
 
 /* Class to show the active card */
@@ -191,25 +242,15 @@ button[type="submit"]:hover {
 }
 
 /* Styles for content within cards */
-.island-card h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #0056b3;
-  font-size: 1.2em;
-}
+/* Duplicate rule removed */
+/* === REMOVED: .card-number styles === */
 
-.island-card p.description {
-  margin-bottom: 10px;
-  color: #555;
-  line-height: 1.7;
-}
+/* Styles for content within cards */
+.island-card h3 { margin-top: 0; margin-bottom: 10px; color: #0056b3; font-size: 1.2em; }
+.island-card p.description { margin-bottom: 10px; color: #555; line-height: 1.7; }
+.island-card p.location { font-size: 0.9em; color: #777; font-style: italic; margin-bottom: 0; }
 
-.island-card p.location {
-  font-size: 0.9em;
-  color: #777;
-  font-style: italic;
-  margin-bottom: 0;
-}
+/* ... (Keep styles for buttons, error message etc.) ... */
 
 /* --- Styling for Next/Start Over Button --- */
 
@@ -243,8 +284,6 @@ button[type="submit"]:hover {
 #prev-card-button:hover {
   background-color: #5a6268; /* Darker grey on hover */
 }
-
-
 
 /* --- Error Styling --- */
 .error-message {

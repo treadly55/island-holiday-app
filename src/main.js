@@ -1,5 +1,6 @@
 // src/main.js
 // Handles form submission, loading overlay, card display, next/prev navigation.
+// Includes dynamic title above cards.
 // *** VERSION USING HARDCODED INDICES 0, 1, 2 for card navigation ***
 // *** WARNING: Assumes API ALWAYS returns exactly 3 results if successful ***
 
@@ -19,6 +20,7 @@ const nextButton = document.getElementById('next-card-button'); // Next/Start Ov
 const backButton = document.getElementById('back-to-form-button'); // Back icon in heading
 const prevButton = document.getElementById('prev-card-button'); // Back button
 const loadingOverlay = document.getElementById('loading-overlay'); // Full screen loading overlay
+const recommendationTitle = document.getElementById('current-recommendation-title'); // Dynamic title H3
 
 // === State Variables ===
 let currentRecommendations = []; // Stores the fetched array
@@ -26,23 +28,25 @@ let currentCardIndex = 0; // Tracks the index (0, 1, or 2)
 
 // === Helper Function to Reset Form ===
 function resetForm() {
-    // console.log("Resetting form..."); // Removed basic log
+    // console.log("Resetting form...");
     if (form) form.reset();
     if (luxuryScaleInput) luxuryScaleInput.value = 5;
     if (luxuryValueDisplay) luxuryValueDisplay.textContent = '5';
     if (cardContainer) cardContainer.innerHTML = '';
     const errorMsgElement = resultsDiv?.querySelector('.error-message');
     if (errorMsgElement) errorMsgElement.remove();
+    // Hide dynamic title on reset
+    if (recommendationTitle) recommendationTitle.style.display = 'none';
 }
 
 // === Helper Function to Go To Form View ===
 function goToFormView() {
-    // console.log("Going back to form view..."); // Removed basic log
+    // console.log("Going back to form view...");
     if(resultsDiv) resultsDiv.style.display = 'none';
     if(nextButton) nextButton.style.display = 'none';
     if(prevButton) prevButton.style.display = 'none';
     if(form) form.style.display = 'block';
-    resetForm();
+    resetForm(); // Will hide recommendationTitle
     currentRecommendations = [];
     currentCardIndex = 0;
 }
@@ -71,6 +75,7 @@ if (form) {
         if(cardContainer) cardContainer.innerHTML = '';
         if(nextButton) nextButton.style.display = 'none';
         if(prevButton) prevButton.style.display = 'none';
+        if(recommendationTitle) recommendationTitle.style.display = 'none'; // Hide title initially
         const errorMsgElement = resultsDiv?.querySelector('.error-message');
         if (errorMsgElement) errorMsgElement.remove();
         if(form) form.style.display = 'none';
@@ -88,7 +93,7 @@ if (form) {
             let data;
             try { data = await response.json(); } catch (jsonError) {
                 console.error("Failed to parse response as JSON:", jsonError); // Keep critical error log
-                if(loadingOverlay) loadingOverlay.classList.remove('visible');
+                 if(loadingOverlay) loadingOverlay.classList.remove('visible');
                 throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}. Response not valid JSON.`);
             }
 
@@ -101,7 +106,7 @@ if (form) {
             }
 
             // --- SUCCESS: Process Array (ASSUMING 3 items ideally) ---
-             // Note: Basic data logs removed for clarity - add back if needed for debugging
+             // Note: Basic data logs removed for clarity
             if (!data.recommendation || !Array.isArray(data.recommendation)) {
                 console.error("Data validation failed: 'recommendation' key missing or not an array.", data); // Keep validation error log
                 throw new Error("Received an invalid response format from the server.");
@@ -115,6 +120,7 @@ if (form) {
                  if(cardContainer) cardContainer.appendChild(noResultsMsg);
                  if(nextButton) nextButton.style.display = 'none';
                  if(prevButton) prevButton.style.display = 'none';
+                 if(recommendationTitle) recommendationTitle.style.display = 'none'; // Keep title hidden
              } else {
                  // *** WARNING: Assumes 3 items are present from here for hardcoded logic later ***
                 currentRecommendations = data.recommendation;
@@ -123,37 +129,29 @@ if (form) {
 
                 // Generate all card elements
                 currentRecommendations.forEach((island, index) => {
-                     // Removed diagnostic logs from inside loop
-                    try {
-                        const card = document.createElement('div');
-                        card.classList.add('island-card');
-                        const nameH3 = document.createElement('h3');
-                        nameH3.textContent = island?.country_name || 'Unnamed Location';
-                        const descP = document.createElement('p');
-                        descP.classList.add('description');
-                        descP.textContent = island?.desc || 'No description available.';
-                        const locationP = document.createElement('p');
-                        locationP.classList.add('location');
-                        locationP.textContent = island?.country_continent_location || 'Location unknown';
-                        card.appendChild(nameH3); card.appendChild(descP); card.appendChild(locationP);
-                        if(cardContainer) cardContainer.appendChild(card);
-                    } catch (cardGenError) {
-                         console.error(`[Card ${index}] Error generating card for island:`, island, cardGenError); // Keep card generation error log
-                    }
+                    // Removed numberSpan/title generation from inside card
+                    const card = document.createElement('div');
+                    card.classList.add('island-card');
+                    const nameH3 = document.createElement('h3'); nameH3.textContent = island?.country_name || 'N/A'; card.appendChild(nameH3);
+                    const descP = document.createElement('p'); descP.classList.add('description'); descP.textContent = island?.desc || 'N/A'; card.appendChild(descP);
+                    const locationP = document.createElement('p'); locationP.classList.add('location'); locationP.textContent = island?.country_continent_location || 'N/A'; card.appendChild(locationP);
+                    if(cardContainer) cardContainer.appendChild(card);
                 });
 
                 // Show the first card (index 0)
                 const cards = cardContainer?.querySelectorAll('.island-card');
 
                 if (cards && cards.length > 0) {
-                    // Removed "Found cards..." log
                     cards[0].classList.add('visible');
+                    // Set and show initial title
+                    if(recommendationTitle) {
+                        recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}`;
+                        recommendationTitle.style.display = 'block';
+                    }
                 } else {
                      console.error("Card elements not found after generation!"); // Keep critical error log
-                     const genErrorMsg = document.createElement('p');
-                     genErrorMsg.classList.add('error-message');
-                     genErrorMsg.textContent = "Sorry, failed to display recommendations.";
-                     if (cardContainer) cardContainer.appendChild(genErrorMsg);
+                     const genErrorMsg = document.createElement('p'); /* ... create/append error ... */
+                     if(recommendationTitle) recommendationTitle.style.display = 'none'; // Hide title if card gen failed
                 }
 
                 // Setup and show the Next button
@@ -180,6 +178,7 @@ if (form) {
             if(cardContainer) cardContainer.innerHTML = '';
             if(nextButton) nextButton.style.display = 'none';
             if(prevButton) prevButton.style.display = 'none';
+            if(recommendationTitle) recommendationTitle.style.display = 'none'; // Hide title on error
 
             const existingErrorMsg = resultsDiv?.querySelector('.error-message');
             if (existingErrorMsg) existingErrorMsg.remove();
@@ -205,45 +204,51 @@ if (nextButton) {
             cards[currentCardIndex].classList.remove('visible');
             currentCardIndex++;
             cards[currentCardIndex].classList.add('visible'); // Assumes cards[1] and cards[2] exist
-            // Show and Enable Prev button since index is now 1 or 2
             if (prevButton) { prevButton.style.display = 'block'; prevButton.disabled = false; }
-            // If we just moved to the last card (index 2), change text
             if (currentCardIndex === 2) { nextButton.textContent = 'Start Over'; }
+
+            // Update dynamic title
+            if(recommendationTitle) {
+                 recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}`;
+            }
         } else { console.log("Cannot go 'Next'. Already on last card (index 2) or cards issue."); } // Keep functional log
     });
-} else { console.error("Could not find #next-card-button element."); } // Keep setup error log
+} else { console.error("Could not find #next-card-button element."); }
 
 // === Event Listener for the Previous Button (Using Hardcoded Index 0 as Start) ===
 // *** WARNING: Navigation logic assumes exactly 3 recommendation cards exist ***
 if (prevButton) {
     prevButton.addEventListener('click', () => {
-        // Removed diagnostic logs
         const cards = cardContainer?.querySelectorAll('.island-card');
         // Check if we can go back (index is 1 or 2)
         if (cards && currentCardIndex > 0) {
             cards[currentCardIndex].classList.remove('visible'); // Assumes cards[1] or cards[2] exists
             currentCardIndex--;
             cards[currentCardIndex].classList.add('visible'); // Assumes cards[0] or cards[1] exists
-            // Always set Next button text back to "Next"
             if (nextButton) { nextButton.textContent = 'Next'; }
-            // Hide and disable "Back" button if we are back on the first card (index 0)
             if (currentCardIndex === 0) {
                 prevButton.style.display = 'none';
                 prevButton.disabled = true;
             }
+
+             // Update dynamic title
+             if(recommendationTitle) {
+                 recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}`;
+             }
         } else { console.log("Cannot go back (already on first card or cards issue)."); } // Keep functional log
     });
-} else { console.error("Could not find #prev-card-button element."); } // Keep setup error log
+} else { console.error("Could not find #prev-card-button element."); }
 
 
 // === Event Listener for the Back Button Icon in Heading ===
 if (backButton) {
     backButton.addEventListener('click', () => { goToFormView(); });
-} else { console.error("Could not find #back-to-form-button element."); } // Keep setup error log
+} else { console.error("Could not find #back-to-form-button element."); }
 
 // Null checks for robustness
-if (!form) console.error("Could not find #planner-form element."); // Keep setup error log
-if (!resultsDiv) console.error("Could not find #results element."); // Keep setup error log
-if (!cardContainer) console.error("Could not find #card-container element."); // Keep setup error log
-if (!loadingOverlay) console.error("Could not find #loading-overlay element."); // Keep setup error log
-if (!prevButton) console.error("Could not find #prev-card-button element."); // Keep setup error log
+if (!form) console.error("Could not find #planner-form element.");
+if (!resultsDiv) console.error("Could not find #results element.");
+if (!cardContainer) console.error("Could not find #card-container element.");
+if (!loadingOverlay) console.error("Could not find #loading-overlay element.");
+if (!prevButton) console.error("Could not find #prev-card-button element.");
+if (!recommendationTitle) console.error("Could not find #current-recommendation-title element."); // Added check
