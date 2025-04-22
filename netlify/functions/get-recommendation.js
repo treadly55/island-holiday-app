@@ -124,7 +124,7 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4-turbo", // Ensure model supports JSON mode if needed, or rely on prompt.
+            model: "gpt-4o-mini", // Ensure model supports JSON mode if needed, or rely on prompt.
             // Optional: Enable JSON mode if using compatible models like gpt-4-1106-preview or gpt-3.5-turbo-1106
             // response_format: { type: "json_object" }, // Note: Might require adjustments to prompt structure if enabled
             messages: [
