@@ -30,8 +30,39 @@ h1 {
     margin-bottom: 15px;
 }
 
+/* --- Loading Overlay Styles --- */
+.loading-overlay {
+  position: fixed; /* Cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Dark semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Ensure it's on top of everything */
+  opacity: 0; /* Start fully transparent */
+  visibility: hidden; /* Start hidden and non-interactive */
+  transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s; /* Fade out opacity, hide visibility AFTER fade */
+}
+
+.loading-overlay.visible {
+  opacity: 1; /* Fade in */
+  visibility: visible; /* Make it visible and interactive */
+  transition: opacity 0.4s ease-in-out, visibility 0s linear 0s; /* Fade in opacity, show visibility immediately */
+}
+
+.loading-text {
+  color: white;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+
 /* --- Form Styling --- */
-form {
+form#planner-form { /* Increased specificity */
   display: flex; /* Use flex for form layout */
   flex-direction: column;
   gap: 20px; /* Space between fieldsets */
@@ -99,16 +130,13 @@ button[type="submit"]:hover {
 
 /* --- Styling for Results Area --- */
 #results {
-  /* Styles for the container itself (if any) */
   width: 100%;
-  /* display: none; is handled by inline style & JS */
 }
 
 /* Styling for the Results Heading Box */
 #results-heading {
-  display: flex; /* Still use flexbox */
-  /* justify-content: space-between; */ /* REMOVED this */
-  align-items: center; /* Keep items vertically centered */
+  display: flex;
+  align-items: center;
   padding: 10px 15px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -116,19 +144,13 @@ button[type="submit"]:hover {
   background-color: #f8f9fa;
   color: #333;
   font-size: 1.2em;
-  position: relative; /* Needed if absolute positioning were used, but good practice */
-}
-
-/* Style for the title text span */
-#results-title {
-  flex-grow: 1; /* Allow title to take up available space */
-  text-align: center; /* Center the text WITHIN this span */
+  position: relative;
 }
 
 /* Styling for the Back Icon */
 #back-to-form-button {
-  flex-shrink: 0; /* Prevent icon from shrinking */
-  margin-right: 15px; /* Add space between icon and title */
+  flex-shrink: 0;
+  margin-right: 15px; /* Space between icon and title */
   font-size: 1.1em;
   color: #007bff;
   cursor: pointer;
@@ -138,6 +160,12 @@ button[type="submit"]:hover {
 
 #back-to-form-button:hover {
   color: #0056b3;
+}
+
+/* Style for the title text span */
+#results-title {
+  flex-grow: 1; /* Allow title to take up available space */
+  text-align: center; /* Center the text WITHIN this span */
 }
 
 /* Container for cards */
@@ -151,7 +179,7 @@ button[type="submit"]:hover {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 20px; /* Space below card (relevant if multiple were visible) */
+  margin-bottom: 20px; /* Space below card */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   /* Hide cards by default */
   display: none;
@@ -166,7 +194,7 @@ button[type="submit"]:hover {
 .island-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
-  color: #0056b3; /* Use theme color for card titles */
+  color: #0056b3;
   font-size: 1.2em;
 }
 
@@ -184,36 +212,41 @@ button[type="submit"]:hover {
 }
 
 /* --- Styling for Next/Start Over Button --- */
-#next-card-button {
-  /* display: none; is handled by inline style & JS */
-  display: block; /* Default display type when shown */
-  width: 100%; /* Make button full width */
+
+.full-width-button {
+  display: block; /* Default display type when shown by JS */
+  width: 100%;
   padding: 12px 20px;
-  margin-top: 20px; /* Space above the button */
-  background-color: #28a745; /* Green color for action */
-  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1.1em;
   text-align: center;
   transition: background-color 0.3s ease;
+  /* Ensure buttons are hidden initially via inline style or JS, not here */
 }
 
+/* Styling for Next/Start Over Button */
+#next-card-button {
+  margin-top: 20px; /* Space above the first button */
+  background-color: #28a745; /* Green color for primary action */
+  color: white;
+}
 #next-card-button:hover {
   background-color: #218838; /* Darker green on hover */
 }
-
-
-/* --- Loading and Error Styling --- */
-#loading-indicator {
-    font-style: italic;
-    color: #555;
-    text-align: center;
-    padding: 20px 0;
-    /* display: none; set inline by JS */
+#prev-card-button {
+  margin-top: 10px; /* Space between Next and Back buttons */
+  background-color: #6c757d; /* Grey color for secondary action */
+  color: white;
+}
+#prev-card-button:hover {
+  background-color: #5a6268; /* Darker grey on hover */
 }
 
+
+
+/* --- Error Styling --- */
 .error-message {
     color: #dc3545; /* Bootstrap danger color */
     background-color: #f8d7da; /* Light pink background */
