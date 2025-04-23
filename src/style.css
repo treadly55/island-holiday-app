@@ -295,3 +295,176 @@ button[type="submit"]:hover {
     text-align: center;
     margin-top: 15px; /* Add space if it appears below heading */
 }
+
+/* Let's assume we target the fieldset directly for layout */
+#planner-form fieldset:has(input[name="interests"]) {
+  /* Use flexbox for layout of the divs inside */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allow chips to wrap to the next line */
+  gap: 15px; /* Spacing between chips */
+  border: none; /* Remove default fieldset border if still present */
+  padding: 0; /* Reset padding if needed */
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Hide the actual checkbox input */
+input[type="checkbox"][name="interests"] {
+  /* Position it off-screen or hide visually but keep accessible */
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none; /* Ensure it doesn't intercept clicks */
+}
+
+/* Style the label to look like a chip/button */
+input[type="checkbox"][name="interests"] + label {
+  display: inline-block; /* Allow padding, margins, etc. */
+  padding: 8px 16px; /* Adjust padding for size */
+  border: 1px solid #ccc; /* Default border */
+  border-radius: 20px; /* Make it rounded like a pill/chip */
+  background-color: #f8f9fa; /* Light background for unselected */
+  color: #495057; /* Default text color */
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; /* Smooth transition */
+  user-select: none; /* Prevent text selection on click */
+}
+
+/* Style the label when the hidden checkbox IS checked */
+input[type="checkbox"][name="interests"]:checked + label {
+  background-color: #007bff; /* Blue background for selected (like image) */
+  color: white; /* White text for selected */
+  border-color: #007bff; /* Matching border color */
+  /* Optional: Add a subtle effect like a slightly darker border or inset shadow */
+  /* box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); */
+}
+
+/* Optional: Add a hover effect for unselected chips */
+input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
+  background-color: #e9ecef; /* Slightly darker background on hover */
+  border-color: #adb5bd;
+}
+
+/* Remove the default div wrapper styling if it interferes */
+/* Check if the div containing input+label needs adjustment */
+#planner-form fieldset div:has(input[name="interests"]) {
+   /* Remove any default flex settings if they conflict */
+   /* display: block; Maybe? Or let flexbox handle it. */
+   /* Reset padding/margin if needed */
+   padding: 0;
+   margin: 0;
+   /* The label itself is now the block */
+}
+
+/* === Style for Radio Button "Buttons" (Island Vibe) === */
+
+/* Target the specific fieldset */
+/* Ensure it doesn't have flex-direction:row if that was applied globally */
+#planner-form fieldset:has(input[name="vibe"]) {
+  /* Reset flex properties if they were wrongly applied */
+  /* display: block; /* Or remove display:flex if it exists */
+  /* flex-direction: column; /* If keeping flex but want vertical */
+  /* Let's assume default block layout for fieldset children */
+  border: none; /* Reset fieldset default */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Use flex on parent */
+  flex-direction: column; /* Stack the wrapper divs vertically */
+  gap: 8px; /* Add space between the button-like options */
+}
+
+/* Hide the actual radio button input */
+input[type="radio"][name="vibe"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Style the label to look like a full-width button */
+input[type="radio"][name="vibe"] + label {
+  display: block; /* Make label take full width */
+  width: 100%;
+  padding: 10px 15px; /* Adjust padding */
+  border: 1px solid #ccc;
+  border-radius: 6px; /* Standard button rounding */
+  background-color: #f8f9fa; /* Default background */
+  color: #495057; /* Default text color */
+  text-align: center; /* Center text */
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  /* margin-bottom: 8px; */ /* Replaced by gap on parent fieldset */
+}
+
+/* Style the label when the hidden radio button IS checked */
+input[type="radio"][name="vibe"]:checked + label {
+  background-color: #007bff; /* Same blue as selected chips */
+  color: white;
+  border-color: #0056b3; /* Darker border */
+  font-weight: bold; /* Make text bold when selected */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); /* Inset shadow for "depressed" look */
+}
+
+/* Optional: Add a hover effect for unselected radio labels */
+input[type="radio"][name="vibe"]:not(:checked) + label:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+/* Ensure the wrapping div doesn't interfere */
+#planner-form fieldset div:has(input[name="vibe"]) {
+   padding: 0;
+   margin: 0;
+   /* No display property needed here, let the label control layout */
+}
+
+
+input[type="range"] {
+  -webkit-appearance: none; /* Remove default styling */
+  width: 100%;
+  height: 8px; /* Make track slightly thicker */
+  background: #ddd; /* Lighter track color */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Slider Thumb (Circle) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px; /* Increase circle size */
+  height: 24px; /* Increase circle size */
+  background-color: #007bff; /* Vibrant thumb color */
+  border-radius: 50%; /* Circular thumb */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Subtle shadow */
+  transition: transform 0.2s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background-color: #007bff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* Optional: Display value styling */
+#luxury-value {
+  font-weight: bold;
+  margin-left: 10px;
+  color: #34495e;
+}
