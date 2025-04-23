@@ -131,7 +131,7 @@ legend {
   font-weight: bold;
   margin-bottom: 8px;
   color: #34495e; /* Slightly darker legend text */
-  font-size: 1.1em;
+  font-size: 1.4em;
 }
 
 fieldset > div {
@@ -424,12 +424,11 @@ input[type="radio"][name="vibe"]:not(:checked) + label:hover {
 
 
 input[type="range"] {
-  -webkit-appearance: none; /* Remove default styling */
+  -webkit-appearance: none;
   width: 100%;
-  height: 8px; /* Make track slightly thicker */
-  background: #ddd; /* Lighter track color */
+  height: 10px; /* Slightly thicker track for balance */
+  background: #ddd;
   border-radius: 5px;
-  outline: none;
   cursor: pointer;
 }
 
@@ -437,34 +436,57 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px; /* Increase circle size */
-  height: 24px; /* Increase circle size */
-  background-color: #007bff; /* Vibrant thumb color */
-  border-radius: 50%; /* Circular thumb */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Subtle shadow */
+  width: 32px; /* Even larger thumb size */
+  height: 32px;
+  background-color: #007bff;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
   transition: transform 0.2s ease-in-out;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
+  transform: scale(1.15);
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   background-color: #007bff;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
   transition: transform 0.2s ease-in-out;
 }
 
 input[type="range"]::-moz-range-thumb:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
-
 /* Optional: Display value styling */
 #luxury-value {
   font-weight: bold;
   margin-left: 10px;
   color: #34495e;
+}
+
+
+.top-level-align {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.slider-rating-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 100px;
+  margin-top: 5px;
+}
+
+footer {
+  color: #434343;
+  background-color: #fff;
+  text-align: center;
+  padding: 5px 0 5px 0;
+  font-size: 0.8rem;
+  margin-top: 40px;
 }

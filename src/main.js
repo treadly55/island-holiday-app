@@ -61,7 +61,7 @@ function updateLoadingMessage() {
             currentMessage = "Completing";
             break;
         default: // Fallback
-            currentMessage = "Reviewing";
+            currentMessage = "Completing";
             loadingMessageCounter = 0; // Reset
             break;
     }
@@ -82,7 +82,7 @@ function stopLoadingInterval() {
         console.log("Loading interval stopped.");
          // Reset status words text to default when stopping
          if (statusWords) {
-            statusWords.textContent = "Loading...";
+            statusWords.textContent = "Completing";
         }
     }
 }
@@ -272,7 +272,7 @@ if (nextButton) {
             // If we just moved to the last card (index 2), change text
             if (currentCardIndex === 2) { nextButton.textContent = 'Start Over'; }
             // Update dynamic title
-            if(recommendationTitle) { recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}`; }
+            if(recommendationTitle) { recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/3`; }
         } else { console.log("Cannot go 'Next'. Already on last card (index 2) or cards issue."); } // Keep functional log
     });
 } else { console.error("Could not find #next-card-button element."); }
@@ -294,7 +294,7 @@ if (prevButton) {
                 prevButton.disabled = true;
             }
             // Update dynamic title
-             if(recommendationTitle) { recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}`; }
+             if(recommendationTitle) { recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/3`; }
         } else { console.log("Cannot go back (already on first card or cards issue)."); } // Keep functional log
     });
 } else { console.error("Could not find #prev-card-button element."); }
