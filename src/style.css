@@ -38,16 +38,35 @@ h1 {
 
 /* --- Loading Overlay Styles --- */
 .loading-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 10000; opacity: 0; visibility: hidden;
+  position: fixed; /* Cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Keep your existing semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.6); /* You might want slightly less opacity with blur */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s;
+
+  /* === ADD THESE LINES for the blur effect === */
+  -webkit-backdrop-filter: blur(8px); /* For Safari */
+  backdrop-filter: blur(8px); /* Standard syntax - Adjust '8px' as needed */
+  /* === END ADDED LINES === */
 }
+
 .loading-overlay.visible {
-  opacity: 1; visibility: visible;
+  opacity: 1;
+  visibility: visible;
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0s;
 }
+
+
+/* --- Styles for content inside overlay --- */
 .content-wrapper { display: flex; align-items: baseline; }
 #status-words { font-size: 30px; color: #fefefe; padding-right: 10px; }
 .loader {
@@ -79,7 +98,7 @@ input[type="range"] { cursor: pointer; }
 button[type="submit"] {
   padding: 12px 20px; background-color: #007bff; color: white;
   border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em;
-  transition: background-color 0.3s ease; margin-top: 10px;
+  transition: background-color 0.3s ease; margin-top: 10px; width: 100%;
 }
 button[type="submit"]:hover { background-color: #0056b3; }
 
@@ -251,6 +270,25 @@ input[type="radio"][name="vibe"]:not(:checked) + label:hover {
 /* Focus Styles */
 #luxury-scale:focus::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
 #luxury-scale:focus::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
+
+/* --- Styling for Card Images --- */
+.island-card-image {
+  display: block; /* Prevents extra space below the image */
+  width: 100%; /* Make image fill card width */
+  height: 180px; /* Example fixed height - adjust as needed */
+  object-fit: cover; /* Scale image nicely, cropping if necessary */
+  object-position: center; /* Center the image within its frame */
+  border-radius: 8px 8px 0 0; /* Round top corners to match card */
+  margin-bottom: 15px; /* Space between image and heading */
+  background-color: #eee; /* Placeholder color while loading or if broken */
+}
+
+/* Adjust card padding if needed now image is inside */
+.island-card {
+  /* Maybe remove top padding if image has top corners rounded */
+  /* padding-top: 0; */ 
+  /* OR keep padding: 20px; if you want space around image */
+}
 
 
 /* === Footer Styles (Example for Sticky Footer) === */
