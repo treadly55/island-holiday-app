@@ -12,7 +12,6 @@ body, h1, h2, h3, fieldset, div, p, form, button { /* Added button to reset */
 /* Ensure html and body take full height for overlay */
 html, body {
   height: 100%;
-  /* Removed margin/padding from here as it's reset above */
 }
 
 body {
@@ -28,6 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 25px; /* Increase space between form and results */
+  min-height: calc(100vh - 40px); /* Example for sticky footer using flex on #app */
 }
 
 h1 {
@@ -38,148 +38,61 @@ h1 {
 
 /* --- Loading Overlay Styles --- */
 .loading-overlay {
-  position: fixed; /* Cover the entire viewport */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Needs parent (html, body) height */
-  background-color: rgba(0, 0, 0, 0.75); /* Dark semi-transparent background */
-  display: flex;          /* Use flexbox to center the child */
-  justify-content: center; /* Center .content-wrapper horizontally */
-  align-items: center;     /* Center .content-wrapper vertically */
-  z-index: 10000;          /* Ensure it's on top of everything */
-  opacity: 0;              /* Start fully transparent */
-  visibility: hidden;
-  transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s; /* Fade out opacity, hide visibility AFTER fade */
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 10000; opacity: 0; visibility: hidden;
+  transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s;
 }
-
 .loading-overlay.visible {
-  opacity: 1; /* Fade in */
-  visibility: visible; /* Make it visible and interactive */
-  transition: opacity 0.4s ease-in-out, visibility 0s linear 0s; /* Fade in opacity, show visibility immediately */
+  opacity: 1; visibility: visible;
+  transition: opacity 0.4s ease-in-out, visibility 0s linear 0s;
 }
-
-/* Wrapper for the text and loader to group them */
-.content-wrapper {
-  display: flex;          /* Arrange its children (text, loader) using flexbox */
-  align-items: baseline;  /* Align the text and loader on their baseline */
-}
-
-#status-words {
-  font-size: 30px;
-  color: #fefefe;
-  padding-right: 10px;
-  /* align-self removed - alignment handled by .content-wrapper */
-  /* 'top: 2px' removed - it requires position:relative to work */
-  /* --- Optional Finesse --- */
-  /* For fine-tuning vertical alignment AFTER baseline: */
-  /* position: relative; */
-  /* top: 1px; /* Example: nudge down slightly */
-  /* --- End Optional Finesse --- */
-}
-
+.content-wrapper { display: flex; align-items: baseline; }
+#status-words { font-size: 30px; color: #fefefe; padding-right: 10px; }
 .loader {
-  width: 30px;
-  aspect-ratio: 2;
+  width: 30px; aspect-ratio: 2;
   --_g: no-repeat radial-gradient(circle closest-side,#fefefe 90%,#0000);
-  background:
-    var(--_g) 0%   50%,
-    var(--_g) 50%  50%,
-    var(--_g) 100% 50%;
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
   background-size: calc(100%/3) 50%;
   animation: l3 1s infinite linear;
-  /* align-self removed - alignment handled by .content-wrapper */
-  vertical-align: baseline; /* Keep for potential cross-browser help */
-   /* --- Optional Finesse (Apply to one element only) --- */
-  /* position: relative; */
-  /* top: -1px; /* Example: nudge up slightly if adjusting loader */
-  /* --- End Optional Finesse --- */
+  vertical-align: baseline;
 }
-
 @keyframes l3 {
-    20%{background-position:0%   0%, 50%  50%,100%  50%}
-    40%{background-position:0% 100%, 50%   0%,100%  50%}
-    60%{background-position:0%  50%, 50% 100%,100%   0%}
-    80%{background-position:0%  50%, 50%  50%,100% 100%}
+  20%{background-position:0% 0%,50% 50%,100% 50%} 40%{background-position:0% 100%,50% 0%,100% 50%}
+  60%{background-position:0% 50%,50% 100%,100% 0%} 80%{background-position:0% 50%,50% 50%,100% 100%}
 }
-
 
 /* --- Form Styling --- */
-form#planner-form { /* Increased specificity */
-  display: flex; /* Use flex for form layout */
-  flex-direction: column;
-  gap: 20px; /* Space between fieldsets */
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
-  /* Form starts visible */
+form#planner-form {
+  display: flex; flex-direction: column; gap: 20px;
+  border: 1px solid #ccc; padding: 20px; border-radius: 8px;
+  background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   display: block;
 }
-
-fieldset {
-  border: none; /* Remove default fieldset border */
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Space within fieldsets */
-}
-
-legend {
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #34495e; /* Slightly darker legend text */
-  font-size: 1.4em;
-}
-
-fieldset > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-label {
-    cursor: pointer; /* Make labels clickable */
-}
-
-input[type="range"] {
-    cursor: pointer;
-}
-
-#luxury-value {
-    font-weight: bold;
-    color: #007bff;
-    min-width: 20px; /* Ensure space for value */
-    text-align: right;
-}
-
+fieldset { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+legend { font-weight: bold; margin-bottom: 8px; color: #34495e; font-size: 1.4em; }
+fieldset > div { display: flex; align-items: center; gap: 8px; }
+label { cursor: pointer; }
+input[type="range"] { cursor: pointer; }
+#luxury-value { font-weight: bold; color: #007bff; min-width: 20px; text-align: right; }
 button[type="submit"] {
-  padding: 12px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease; /* Smooth hover transition */
-  margin-top: 10px; /* Add space above button */
+  padding: 12px 20px; background-color: #007bff; color: white;
+  border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em;
+  transition: background-color 0.3s ease; margin-top: 10px;
 }
+button[type="submit"]:hover { background-color: #0056b3; }
 
-button[type="submit"]:hover {
-  background-color: #0056b3;
-}
+/* --- Results Area --- */
+#results { width: 100%; flex-grow: 1; /* Added for sticky footer example */ }
 
-/* --- Styling for Results Area --- */
-#results {
-  width: 100%;
-}
-
-/* Styling for the Results Heading Box */
+/* === MODIFIED: Styling for the Results Heading Box using GRID === */
 #results-heading {
-  display: flex;
-  align-items: center;
+  display: grid; /* Use Grid */
+  /* Define 3 columns: ~1/8th, auto middle, ~1/8th */
+  grid-template-columns: 1fr 6fr 1fr; /* Flexible units, maintains ratio */
+  /* Or use percentages: grid-template-columns: 12.5% auto 12.5%; */
+  align-items: center; /* Vertically center items within the row */
   padding: 10px 15px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -187,306 +100,169 @@ button[type="submit"]:hover {
   background-color: #f8f9fa;
   color: #333;
   font-size: 1.2em;
-  position: relative;
+  /* position: relative; */ /* Not needed for grid */
 }
 
-/* Styling for the Back Icon */
+/* Styling for the Back Icon (now in grid cell 1) */
 #back-to-form-button {
-  flex-shrink: 0;
-  margin-right: 15px; /* Space between icon and title */
+  /* grid-column: 1; */ /* Implicitly in the first column */
+  /* flex-shrink: 0; */ /* Not needed for grid */
+  justify-self: start; /* Align icon to the start of its grid cell */
   font-size: 1.1em;
   color: #007bff;
   cursor: pointer;
   padding: 5px;
   transition: color 0.2s ease;
+  /* margin-right is not needed as grid handles spacing */
 }
-
-#back-to-form-button:hover {
-  color: #0056b3;
-}
-
-/* Style for the title text span */
-/* Duplicated rules removed, kept the combined one */
-#results-heading { display: flex; align-items: center; padding: 10px 15px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; background-color: #f8f9fa; color: #333; font-size: 1.2em; position: relative; }
-#back-to-form-button { flex-shrink: 0; margin-right: 15px; font-size: 1.1em; color: #007bff; cursor: pointer; padding: 5px; transition: color 0.2s ease; }
 #back-to-form-button:hover { color: #0056b3; }
-#results-title { flex-grow: 1; text-align: center; }
 
-/* === NEW: Style for Dynamic Title === */
+/* Style for the title text span (now in grid cell 2) */
+#results-title {
+  /* grid-column: 2; */ /* Implicitly in the second column */
+  /* flex-grow: 1; */ /* Not needed for grid */
+  text-align: center; /* Center text within its grid cell */
+  /* margin: 0 auto; */ /* Alternative centering if needed */
+}
+/* === END GRID MODIFICATION === */
+
+/* Style for Dynamic Title */
 #current-recommendation-title {
-  margin-bottom: 15px; /* Space below this title, above the card */
+  margin-bottom: 15px;
   font-size: 1.1em;
   font-weight: bold;
   color: #495057;
-  /* text-align: center; */ /* Handled by inline style, or move here */
-  /* display: none; */ /* Handled by inline style & JS */
+  text-align: center; /* Explicitly center */
 }
 
 /* Container for cards */
-#card-container {
-  /* No specific styles needed unless for layout */
-}
+#card-container { }
 
 /* --- Styling for Individual Island Cards --- */
 .island-card {
   background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px;
-  padding: 20px; /* Reset padding-top if changed before */
-  /* position: relative; */ /* No longer needed for number badge */
-  margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   display: none; /* Hide cards by default */
 }
-
-/* Class to show the active card */
-.island-card.visible {
-  display: block;
-}
-
-/* Styles for content within cards */
-/* Duplicate rule removed */
-/* === REMOVED: .card-number styles === */
-
-/* Styles for content within cards */
+.island-card.visible { display: block; }
 .island-card h3 { margin-top: 0; margin-bottom: 10px; color: #0056b3; font-size: 1.2em; }
 .island-card p.description { margin-bottom: 10px; color: #555; line-height: 1.7; }
 .island-card p.location { font-size: 0.9em; color: #777; font-style: italic; margin-bottom: 0; }
 
-/* ... (Keep styles for buttons, error message etc.) ... */
-
-/* --- Styling for Next/Start Over Button --- */
-
+/* --- Styling for Action Buttons --- */
 .full-width-button {
-  display: block; /* Default display type when shown by JS */
-  width: 100%;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1em;
-  text-align: center;
-  transition: background-color 0.3s ease;
-  /* Ensure buttons are hidden initially via inline style or JS, not here */
+  display: block; width: 100%; padding: 12px 20px; border: none;
+  border-radius: 4px; cursor: pointer; font-size: 1.1em;
+  text-align: center; transition: background-color 0.3s ease;
 }
-
-/* Styling for Next/Start Over Button */
 #next-card-button {
-  margin-top: 20px; /* Space above the first button */
-  background-color: #28a745; /* Green color for primary action */
-  color: white;
+  margin-top: 20px; background-color: #28a745; color: white;
 }
-#next-card-button:hover {
-  background-color: #218838; /* Darker green on hover */
-}
+#next-card-button:hover { background-color: #218838; }
 #prev-card-button {
-  margin-top: 10px; /* Space between Next and Back buttons */
-  background-color: #6c757d; /* Grey color for secondary action */
-  color: white;
+  margin-top: 10px; background-color: #6c757d; color: white;
 }
-#prev-card-button:hover {
-  background-color: #5a6268; /* Darker grey on hover */
-}
+#prev-card-button:hover { background-color: #5a6268; }
 
 /* --- Error Styling --- */
 .error-message {
-    color: #dc3545; /* Bootstrap danger color */
-    background-color: #f8d7da; /* Light pink background */
-    border: 1px solid #f5c6cb; /* Reddish border */
-    padding: 15px;
-    border-radius: 5px;
-    text-align: center;
-    margin-top: 15px; /* Add space if it appears below heading */
+  color: #dc3545; background-color: #f8d7da; border: 1px solid #f5c6cb;
+  padding: 15px; border-radius: 5px; text-align: center; margin-top: 15px;
 }
 
-/* Let's assume we target the fieldset directly for layout */
+/* === Checkbox Chip Styling === */
 #planner-form fieldset:has(input[name="interests"]) {
-  /* Use flexbox for layout of the divs inside */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; /* Allow chips to wrap to the next line */
-  gap: 15px; /* Spacing between chips */
-  border: none; /* Remove default fieldset border if still present */
-  padding: 0; /* Reset padding if needed */
-  margin-top: 15px;
-  margin-bottom: 15px;
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  gap: 15px; border: none; padding: 0;
+  margin-top: 15px; margin-bottom: 15px;
 }
-
-/* Hide the actual checkbox input */
 input[type="checkbox"][name="interests"] {
-  /* Position it off-screen or hide visually but keep accessible */
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none; /* Ensure it doesn't intercept clicks */
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
 }
-
-/* Style the label to look like a chip/button */
 input[type="checkbox"][name="interests"] + label {
-  display: inline-block; /* Allow padding, margins, etc. */
-  padding: 8px 16px; /* Adjust padding for size */
-  border: 1px solid #ccc; /* Default border */
-  border-radius: 20px; /* Make it rounded like a pill/chip */
-  background-color: #f8f9fa; /* Light background for unselected */
-  color: #495057; /* Default text color */
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; /* Smooth transition */
-  user-select: none; /* Prevent text selection on click */
+  display: inline-block; padding: 8px 16px; border: 1px solid #ccc;
+  border-radius: 20px; background-color: #f8f9fa; color: #495057;
+  cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  user-select: none;
 }
-
-/* Style the label when the hidden checkbox IS checked */
 input[type="checkbox"][name="interests"]:checked + label {
-  background-color: #007bff; /* Blue background for selected (like image) */
-  color: white; /* White text for selected */
-  border-color: #007bff; /* Matching border color */
-  /* Optional: Add a subtle effect like a slightly darker border or inset shadow */
-  /* box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); */
+  background-color: #007bff; color: white; border-color: #007bff;
 }
-
-/* Optional: Add a hover effect for unselected chips */
 input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
-  background-color: #e9ecef; /* Slightly darker background on hover */
-  border-color: #adb5bd;
+  background-color: #e9ecef; border-color: #adb5bd;
 }
+#planner-form fieldset div:has(input[name="interests"]) { padding: 0; margin: 0; }
 
-/* Remove the default div wrapper styling if it interferes */
-/* Check if the div containing input+label needs adjustment */
-#planner-form fieldset div:has(input[name="interests"]) {
-   /* Remove any default flex settings if they conflict */
-   /* display: block; Maybe? Or let flexbox handle it. */
-   /* Reset padding/margin if needed */
-   padding: 0;
-   margin: 0;
-   /* The label itself is now the block */
-}
-
-/* === Style for Radio Button "Buttons" (Island Vibe) === */
-
-/* Target the specific fieldset */
-/* Ensure it doesn't have flex-direction:row if that was applied globally */
+/* === Radio Button Styling === */
 #planner-form fieldset:has(input[name="vibe"]) {
-  /* Reset flex properties if they were wrongly applied */
-  /* display: block; /* Or remove display:flex if it exists */
-  /* flex-direction: column; /* If keeping flex but want vertical */
-  /* Let's assume default block layout for fieldset children */
-  border: none; /* Reset fieldset default */
-  padding: 0;
-  margin: 0;
-  display: flex; /* Use flex on parent */
-  flex-direction: column; /* Stack the wrapper divs vertically */
-  gap: 8px; /* Add space between the button-like options */
+  border: none; padding: 0; margin: 0; display: flex;
+  flex-direction: column; gap: 8px;
 }
-
-/* Hide the actual radio button input */
 input[type="radio"][name="vibe"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
 }
-
-/* Style the label to look like a full-width button */
 input[type="radio"][name="vibe"] + label {
-  display: block; /* Make label take full width */
-  width: 100%;
-  padding: 10px 15px; /* Adjust padding */
-  border: 1px solid #ccc;
-  border-radius: 6px; /* Standard button rounding */
-  background-color: #f8f9fa; /* Default background */
-  color: #495057; /* Default text color */
-  text-align: center; /* Center text */
-  cursor: pointer;
+  display: block; width: 100%; padding: 10px 15px; border: 1px solid #ccc;
+  border-radius: 6px; background-color: #f8f9fa; color: #495057;
+  text-align: center; cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
-  /* margin-bottom: 8px; */ /* Replaced by gap on parent fieldset */
 }
-
-/* Style the label when the hidden radio button IS checked */
 input[type="radio"][name="vibe"]:checked + label {
-  background-color: #007bff; /* Same blue as selected chips */
-  color: white;
-  border-color: #0056b3; /* Darker border */
-  font-weight: bold; /* Make text bold when selected */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); /* Inset shadow for "depressed" look */
+  background-color: #007bff; color: white; border-color: #0056b3;
+  font-weight: bold; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
-
-/* Optional: Add a hover effect for unselected radio labels */
 input[type="radio"][name="vibe"]:not(:checked) + label:hover {
-  background-color: #e9ecef;
-  border-color: #adb5bd;
+  background-color: #e9ecef; border-color: #adb5bd;
 }
+#planner-form fieldset div:has(input[name="vibe"]) { padding: 0; margin: 0; }
 
-/* Ensure the wrapping div doesn't interfere */
-#planner-form fieldset div:has(input[name="vibe"]) {
-   padding: 0;
-   margin: 0;
-   /* No display property needed here, let the label control layout */
-}
-
-
-input[type="range"] {
+/* === Custom Range Slider Styles === */
+/* Reset only necessary parts for custom thumb */
+#luxury-scale {
   -webkit-appearance: none;
-  width: 100%;
-  height: 10px; /* Slightly thicker track for balance */
-  background: #ddd;
-  border-radius: 5px;
-  cursor: pointer;
+   appearance: none;
+   width: 100%;
+   background: transparent; /* Allow track style to show */
+   cursor: pointer;
+   outline: none;
+   margin: 5px 0;
+   height: 32px; /* Make input height match thumb for easier alignment */
 }
-
-/* Slider Thumb (Circle) */
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 32px; /* Even larger thumb size */
-  height: 32px;
-  background-color: #007bff;
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease-in-out;
+/* Track Styles */
+#luxury-scale::-webkit-slider-runnable-track {
+  width: 100%; height: 10px; background: #ddd; border: none; border-radius: 5px; cursor: pointer;
 }
-
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
+#luxury-scale::-moz-range-track {
+  width: 100%; height: 10px; background: #ddd; border: none; border-radius: 5px; cursor: pointer;
 }
-
-input[type="range"]::-moz-range-thumb {
-  width: 32px;
-  height: 32px;
-  background-color: #007bff;
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease-in-out;
+/* Thumb Styles */
+#luxury-scale::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; margin-top: -11px; /* (10/2 - 32/2) = 5 - 16 */
+  width: 32px; height: 32px; background-color: #007bff; border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out;
 }
-
-input[type="range"]::-moz-range-thumb:hover {
-  transform: scale(1.15);
+#luxury-scale::-webkit-slider-thumb:hover { transform: scale(1.15); }
+#luxury-scale::-moz-range-thumb {
+  width: 32px; height: 32px; background-color: #007bff; border-radius: 50%; border: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; cursor: pointer;
 }
-/* Optional: Display value styling */
-#luxury-value {
-  font-weight: bold;
-  margin-left: 10px;
-  color: #34495e;
-}
+#luxury-scale::-moz-range-thumb:hover { transform: scale(1.15); }
+/* Focus Styles */
+#luxury-scale:focus::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
+#luxury-scale:focus::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
 
 
-.top-level-align {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.slider-rating-block {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 100px;
-  margin-top: 5px;
-}
-
+/* === Footer Styles (Example for Sticky Footer) === */
+/* These assume body/#app is flex container with min-height 100vh */
 footer {
   color: #434343;
   background-color: #fff;
   text-align: center;
   padding: 5px 0 5px 0;
   font-size: 0.8rem;
-  margin-top: 40px;
+  margin-top: 40px; /* Or let flexbox position it */
+  flex-shrink: 0; /* Prevent footer from shrinking */
 }
+
+.slider-rating-block { display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 100px; margin-top: 5px; }
