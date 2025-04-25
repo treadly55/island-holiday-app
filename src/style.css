@@ -304,3 +304,211 @@ footer {
 }
 
 .slider-rating-block { display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 100px; margin-top: 5px; }
+
+
+/* === NEW: Lush Green Dominant Theme === */
+
+/* --- Base & Backgrounds --- */
+body {
+  /* Light neutral background */
+  background-color: #FAF0E6; /* Linen */
+}
+
+h1 {
+  /* Deep green for headings */
+  color: #2F4F2F; /* Dark Slate Gray */
+}
+
+form#planner-form,
+.island-card {
+  /* Light beige element background */
+  background-color: #F5EADD; /* Warm Beige */
+  /* Muted green border */
+  border: 1px solid #A0A08C; /* Muted Grey-Green */
+}
+
+legend {
+  /* Deep green for legends */
+  color: #2F4F2F; /* Dark Slate Gray */
+}
+
+/* --- Card Specific Colors --- */
+.island-card h3 {
+  /* Deep green for card titles */
+  color: #2F4F2F; /* Dark Slate Gray */
+}
+
+.island-card p.description {
+  /* Dark grey for readability */
+  color: #4A4A4A;
+}
+
+.island-card p.location {
+  /* Muted grey/green */
+  color: #6A746A; /* Adjusted slightly */
+}
+
+.island-card-image {
+    /* Light brownish placeholder */
+    background-color: #E0DBCF;
+}
+
+/* --- Form Elements & Accents (Green Focus) --- */
+
+/* Range Slider */
+#luxury-scale::-webkit-slider-runnable-track,
+#luxury-scale::-moz-range-track {
+  /* Light neutral track */
+  background: #E0DBCF;
+}
+#luxury-scale::-webkit-slider-thumb,
+#luxury-scale::-moz-range-thumb {
+  /* Primary green accent */
+  background-color: #556B2F; /* Dark Olive Green */
+}
+#luxury-scale:focus::-webkit-slider-thumb,
+#luxury-scale:focus::-moz-range-thumb {
+    /* Focus ring matching accent */
+    box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5), 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Checkbox Chips */
+input[type="checkbox"][name="interests"] + label {
+  /* Muted green border, light background */
+  border: 1px solid #A0A08C; /* Muted Grey-Green */
+  background-color: #F5EADD; /* Warm Beige */
+  color: #2F4F2F; /* Dark Slate Gray text */
+}
+input[type="checkbox"][name="interests"]:checked + label {
+  /* Primary green accent */
+  background-color: #556B2F; /* Dark Olive Green */
+  color: white;
+  border-color: #556B2F;
+}
+input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
+  /* Slightly darker beige */
+  background-color: #E0DBCF;
+  border-color: #8A948A; /* Slightly darker grey-green */
+}
+input[type="checkbox"][name="interests"]:focus + label {
+  /* Focus matching accent */
+  outline-color: #405023; /* Darker Olive */
+  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
+}
+
+/* Radio Buttons */
+input[type="radio"][name="vibe"] + label {
+  /* Muted green border, light background */
+  border: 1px solid #A0A08C; /* Muted Grey-Green */
+  background-color: #F5EADD; /* Warm Beige */
+  color: #2F4F2F; /* Dark Slate Gray text */
+}
+input[type="radio"][name="vibe"]:checked + label {
+  /* Primary green accent */
+  background-color: #556B2F; /* Dark Olive Green */
+  color: white;
+  border-color: #405023; /* Darker Olive */
+}
+input[type="radio"][name="vibe"]:not(:checked) + label:hover {
+  /* Slightly darker beige */
+  background-color: #E0DBCF;
+  border-color: #8A948A; /* Slightly darker grey-green */
+}
+input[type="radio"][name="vibe"]:focus + label {
+  /* Focus matching accent */
+  outline-color: #405023; /* Darker Olive */
+  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
+}
+
+
+/* Submit & Next Buttons (Using primary green accent) */
+button[type="submit"],
+#next-card-button {
+  /* Primary green accent */
+  background-color: #556B2F; /* Dark Olive Green */
+  color: white;
+}
+button[type="submit"]:hover,
+#next-card-button:hover {
+  /* Darker green for hover */
+  background-color: #405023; /* Darker Olive */
+}
+
+/* --- Results Area --- */
+#results-heading {
+  /* Light background, green border and text */
+  background-color: #F5EADD; /* Warm Beige */
+  border: 1px solid #A0A08C; /* Muted Grey-Green */
+  color: #2F4F2F; /* Dark Slate Gray */
+}
+
+/* Back & Prev Buttons (Using secondary, lighter green accent) */
+#back-to-form-button,
+button#back-to-form-button,
+#prev-card-button {
+  /* Lighter, muted green */
+  background-color: #8FBC8F; /* Dark Sea Green */
+  color: #1A3A1A; /* Darker green text for contrast on light green bg */
+  /* OR keep white text: color: white; */
+}
+#back-to-form-button:hover,
+button#back-to-form-button:hover,
+#prev-card-button:hover {
+  /* Slightly darker/richer sea green */
+  background-color: #709670;
+}
+/* If Back button is just icon color */
+/* #back-to-form-button { color: #8FBC8F; } */
+/* #back-to-form-button:hover { color: #709670; } */
+
+
+#current-recommendation-title {
+  /* Dark text for readability */
+  color: #2F4F2F; /* Dark Slate Gray */
+}
+
+/* --- Status & Footer --- */
+footer {
+    /* Example footer colors */
+    color: #2F4F2F; /* Dark Slate Gray */
+    background-color: #D7E0D7; /* Very light green/grey */
+}
+
+/* Error Message (Keeping earthy red/brown) */
+.error-message {
+  color: #A52A2A; /* Brown/Rust */
+  background-color: #FADBD8; /* Light Pinkish-Brown */
+  border: 1px solid #E5AAA7; /* Muted Pink/Brown */
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@500&display=swap');
+
+
+body {
+  font-family: 'Lato', sans-serif; /* Body font */
+  /* ... other body styles */
+}
+
+h1, h2, h3, legend /* Add other header elements as needed */ {
+  font-family: 'Oswald', sans-serif; /* Header font */
+  font-weight: 500; /* Example weight */
+  /* ... other heading styles */
+}
+
+/* Ensure buttons etc. use the body font unless overridden */
+button, input, label, select, textarea {
+    font-family: inherit; /* Inherits from body */
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-image > img {
+  max-height: 80px;
+}
