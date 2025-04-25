@@ -261,12 +261,12 @@ input[type="radio"][name="vibe"]:not(:checked) + label:hover {
 /* Thumb Styles */
 #luxury-scale::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none; margin-top: -11px; /* (10/2 - 32/2) = 5 - 16 */
-  width: 32px; height: 32px; background-color: #007bff; border-radius: 50%;
+  width: 32px; height: 32px; background-color: #186604; border-radius: 50%;
   box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out;
 }
 #luxury-scale::-webkit-slider-thumb:hover { transform: scale(1.15); }
 #luxury-scale::-moz-range-thumb {
-  width: 32px; height: 32px; background-color: #007bff; border-radius: 50%; border: none;
+  width: 32px; height: 32px; background-color: #186604; border-radius: 50%; border: none;
   box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; cursor: pointer;
 }
 #luxury-scale::-moz-range-thumb:hover { transform: scale(1.15); }
@@ -285,14 +285,6 @@ input[type="radio"][name="vibe"]:not(:checked) + label:hover {
   margin-bottom: 15px; /* Space between image and heading */
   background-color: #eee; /* Placeholder color while loading or if broken */
 }
-
-/* Adjust card padding if needed now image is inside */
-.island-card {
-  /* Maybe remove top padding if image has top corners rounded */
-  /* padding-top: 0; */ 
-  /* OR keep padding: 20px; if you want space around image */
-}
-
 
 /* === Footer Styles (Example for Sticky Footer) === */
 /* These assume body/#app is flex container with min-height 100vh */
