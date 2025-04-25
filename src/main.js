@@ -158,7 +158,7 @@ if (form) {
              loadingMessageCounter = 0;
              stopLoadingInterval(); // Clear previous just in case
              updateLoadingMessage(); // Set initial message
-             loadingIntervalId = setInterval(updateLoadingMessage, 3000);
+             loadingIntervalId = setInterval(updateLoadingMessage, 3500);
              // console.log("Loading interval started (counter method).");
         }
 

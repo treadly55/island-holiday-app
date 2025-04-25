@@ -34,6 +34,8 @@ h1 {
   text-align: center;
   color: #2c3e50; /* Darker blue */
   margin-bottom: 15px;
+  font-size: 2.4rem;
+  line-height: 2.7rem;
 }
 
 /* --- Loading Overlay Styles --- */
@@ -130,7 +132,8 @@ button[type="submit"]:hover { background-color: #0056b3; }
   font-size: 1.1em;
   color: #007bff;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px;
+  border-radius: 6px;
   transition: color 0.2s ease;
   /* margin-right is not needed as grid handles spacing */
 }
@@ -164,7 +167,7 @@ button[type="submit"]:hover { background-color: #0056b3; }
   display: none; /* Hide cards by default */
 }
 .island-card.visible { display: block; }
-.island-card h3 { margin-top: 0; margin-bottom: 10px; color: #0056b3; font-size: 1.2em; }
+.island-card h3 { margin-top: 0; margin-bottom: 10px; color: #0056b3; font-size: 2.2em; }
 .island-card p.description { margin-bottom: 10px; color: #555; line-height: 1.7; }
 .island-card p.location { font-size: 0.9em; color: #777; font-style: italic; margin-bottom: 0; }
 
@@ -507,8 +510,20 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-left: 10px
 }
 
 .header-image > img {
   max-height: 80px;
+}
+
+
+.intro-text {
+  font-family: 'Oswald', sans-serif; /* Header font */
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 50px;
+  padding-bottom: 28px;
+  border-bottom: 2px solid orange;
 }
