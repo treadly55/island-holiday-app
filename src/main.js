@@ -318,7 +318,7 @@ if (form) {
 
                  // Setup buttons (using hardcoded logic for enabling prev/next limits)
                  if (nextButton) {
-                     nextButton.textContent = 'Next';
+                     nextButton.textContent = 'Next suggestion';
                       // Disable Next only if we know there's exactly 1 card (from length check)
                       // For hardcoded logic, we assume > 1 initially unless length was 0
                      nextButton.disabled = currentRecommendations.length <= 1;

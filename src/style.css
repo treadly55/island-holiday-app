@@ -104,7 +104,10 @@ button[type="submit"] {
 button[type="submit"]:hover { background-color: #0056b3; }
 
 /* --- Results Area --- */
-#results { width: 100%; flex-grow: 1; /* Added for sticky footer example */ }
+#results { 
+  width: 100%;
+  padding: 0 30px; 
+}
 
 /* === MODIFIED: Styling for the Results Heading Box using GRID === */
 #results-heading {
@@ -159,7 +162,7 @@ button[type="submit"]:hover { background-color: #0056b3; }
 
 /* --- Styling for Individual Island Cards --- */
 .island-card {
-  background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px;
+  background-color: #ffffff; border: 1px solid #ddd;
   padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   display: none; /* Hide cards by default */
 }
@@ -574,7 +577,7 @@ button[type="submit"]:hover {
 }
 
 button[type="submit"].ready {
-  background-color: orange;
+  background-color: rgb(52, 141, 0);
   color: white;
 }
 button[type="submit"].ready:hover {
