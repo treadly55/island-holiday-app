@@ -113,13 +113,13 @@ function updateNavigationButtons() {
         nextButton.disabled = false;
         
         if (isLast) {
-            nextButton.textContent = 'Start new search';
+            nextButton.textContent = 'Start Over';
         } else {
             nextButton.textContent = 'Next';
         }
         
         if (totalCards === 1) {
-            nextButton.textContent = 'Start new search';
+            nextButton.textContent = 'Start Over';
         }
     }
 

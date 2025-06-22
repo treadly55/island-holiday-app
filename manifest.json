@@ -1,0 +1,41 @@
+{
+  "name": "Island Holiday Planner",
+  "short_name": "Island Planner",
+  "description": "AI-powered island destination recommendations for your perfect holiday",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF0E6",
+  "theme_color": "#2F4F2F",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["travel", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My next island holiday",
+      "short_name": "My next island holiday",
+      "description": "Start planning your island holiday",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
