@@ -1,9 +1,8 @@
 // src/main.js
 // Handles form submission, loading overlay with cycling text (counter/switch method),
 // card display, next/prev navigation, footer visibility, and scroll-to-top.
-// *** Uses counter/switch for loading messages instead of array ***
-// *** Still uses HARDCODED INDICES 0, 1, 2 for card navigation ***
-// *** WARNING: Assumes API ALWAYS returns exactly 3 results if successful ***
+// *** FIXED: Now uses DYNAMIC navigation based on actual array length ***
+// *** REMOVED: All hardcoded indices and assumptions about 3 results ***
 
 import './style.css';
 // Import islandImagePaths - assuming imageData.js uses named export
@@ -29,7 +28,7 @@ const statusWords = document.getElementById('status-words'); // Loading text ele
 
 // === State Variables ===
 let currentRecommendations = []; // Stores the fetched array
-let currentCardIndex = 0; // Tracks the index (0, 1, or 2)
+let currentCardIndex = 0; // Tracks the current index
 let loadingIntervalId = null; // To store interval ID
 let loadingMessageCounter = 0; // Counter for loading messages
 const MAX_LOADING_MESSAGE_INDEX = 2; // Max index for 3 messages
@@ -70,6 +69,77 @@ function checkFormCompleteness() {
         submitButton.classList.add('ready');
     } else {
         submitButton.classList.remove('ready');
+    }
+}
+
+// === NEW: Dynamic Navigation Update Function ===
+function updateNavigationButtons() {
+    if (!currentRecommendations || currentRecommendations.length === 0) {
+        // No recommendations - hide all navigation
+        if (nextButton) nextButton.style.display = 'none';
+        if (prevButton) prevButton.style.display = 'none';
+        return;
+    }
+
+    const totalCards = currentRecommendations.length;
+    const isFirst = currentCardIndex === 0;
+    const isLast = currentCardIndex === totalCards - 1;
+
+    // Update Previous Button
+    if (prevButton) {
+        if (isFirst) {
+            prevButton.style.display = 'none';
+            prevButton.disabled = true;
+        } else {
+            prevButton.style.display = 'block';
+            prevButton.disabled = false;
+        }
+    }
+
+    // Update Next Button
+    if (nextButton) {
+        nextButton.style.display = 'block';
+        nextButton.disabled = false;
+        
+        if (isLast) {
+            nextButton.textContent = 'Start Over';
+        } else {
+            nextButton.textContent = 'Next';
+        }
+        
+        // Special case: if only 1 recommendation, show "Start Over" immediately
+        if (totalCards === 1) {
+            nextButton.textContent = 'Start Over';
+        }
+    }
+
+    // Update title
+    if (recommendationTitle) {
+        recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/${totalCards}`;
+        recommendationTitle.style.display = 'block';
+    }
+}
+
+// === NEW: Function to Show Specific Card ===
+function showCard(index) {
+    const cards = cardContainer?.querySelectorAll('.island-card');
+    if (!cards || cards.length === 0) return;
+
+    // Validate index
+    if (index < 0 || index >= currentRecommendations.length) {
+        console.warn(`Invalid card index: ${index}. Valid range: 0-${currentRecommendations.length - 1}`);
+        return;
+    }
+
+    // Hide all cards
+    cards.forEach(card => card.classList.remove('visible'));
+    
+    // Show the target card
+    if (cards[index]) {
+        cards[index].classList.add('visible');
+        currentCardIndex = index;
+        updateNavigationButtons();
+        scrollToPageTop();
     }
 }
 
@@ -245,14 +315,19 @@ if (form) {
 
              if (data.recommendation.length === 0) {
                  console.warn("Received 0 recommendations.");
-                 const noResultsMsg = document.createElement('p'); /* ... */
-                 noResultsMsg.textContent = "Couldn't find islands matching."; noResultsMsg.style.textAlign = 'center';
+                 const noResultsMsg = document.createElement('p');
+                 noResultsMsg.textContent = "Couldn't find islands matching your preferences. Please try different selections.";
+                 noResultsMsg.style.textAlign = 'center';
                  if(cardContainer) cardContainer.appendChild(noResultsMsg);
-                 // Buttons remain hidden
+                 // Reset state variables
+                 currentRecommendations = [];
+                 currentCardIndex = 0;
+                 // Hide navigation buttons
+                 updateNavigationButtons();
 
              } else {
-                 // *** WARNING: Assumes 3 items for hardcoded nav logic ***
-                 currentRecommendations = data.recommendation; // Still store actual data
+                 // *** FIXED: Now works with any number of results ***
+                 currentRecommendations = data.recommendation;
                  currentCardIndex = 0;
                  if(cardContainer) cardContainer.innerHTML = '';
 
@@ -263,7 +338,7 @@ if (form) {
                          card.classList.add('island-card');
 
                          // ===============================================
-                         // === START: Image Integration (ONLY CHANGE) ===
+                         // === START: Image Integration ===
                          // ===============================================
                          // 1. Get a random image path using the existing helper function
                          const imagePath = getRandomImagePath(islandImagePaths);
@@ -277,9 +352,8 @@ if (form) {
                          // 3. Prepend the image to the card (add it before other content)
                          card.appendChild(imgElement);
                          // ===============================================
-                         // === END: Image Integration (ONLY CHANGE) ===
+                         // === END: Image Integration ===
                          // ===============================================
-
 
                          // Append existing elements AFTER the image
                          const nameH3 = document.createElement('h3');
@@ -304,33 +378,8 @@ if (form) {
                      }
                  });
 
-                 // Show the first card (index 0)
-                 const cards = cardContainer?.querySelectorAll('.island-card');
-                 if (cards && cards.length > 0) {
-                     cards[0].classList.add('visible');
-                     if(recommendationTitle) {
-                         // Use actual length for display text if possible, fallback for title logic
-                         const totalCards = currentRecommendations.length || 3; // Use actual length or assume 3
-                         recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/${totalCards}`;
-                         recommendationTitle.style.display = 'block';
-                     }
-                 } else { /* ... handle card generation error ... */ }
-
-                 // Setup buttons (using hardcoded logic for enabling prev/next limits)
-                 if (nextButton) {
-                     nextButton.textContent = 'Next suggestion';
-                      // Disable Next only if we know there's exactly 1 card (from length check)
-                      // For hardcoded logic, we assume > 1 initially unless length was 0
-                     nextButton.disabled = currentRecommendations.length <= 1;
-                     nextButton.style.display = 'block';
-                 }
-                 if(prevButton) {
-                      prevButton.style.display = 'none';
-                      prevButton.disabled = true;
-                 }
-                  if (nextButton && currentRecommendations.length === 1) { // Adjust text if exactly 1
-                       nextButton.textContent = 'Start Over';
-                   }
+                 // Show the first card and set up navigation
+                 showCard(0);
              }
 
             // Final UI state
@@ -361,52 +410,32 @@ if (form) {
 }
 
 
-// === Event Listener for Next/Start Over Button (Using Hardcoded Index 2 as End LIMIT) ===
-// *** WARNING: Navigation logic assumes exactly 3 recommendation cards exist ***
+// === FIXED: Dynamic Next/Start Over Button Event Listener ===
 if (nextButton) {
     nextButton.addEventListener('click', () => {
-        if (nextButton.textContent === 'Start Over') { goToFormView(); return; }
-        const cards = cardContainer?.querySelectorAll('.island-card');
-        // HARDCODED LOGIC: Only advance if current index is 0 or 1
-        if (cards && currentCardIndex < 2) {
-            cards[currentCardIndex].classList.remove('visible');
-            currentCardIndex++;
-            cards[currentCardIndex].classList.add('visible');
-            if (prevButton) { prevButton.style.display = 'block'; prevButton.disabled = false; }
-            // HARDCODED LOGIC: Change text only when reaching index 2
-            if (currentCardIndex === 2) { nextButton.textContent = 'Start Over'; } 
-            if(recommendationTitle) {
-                const totalCards = currentRecommendations.length || 3; // Still uses fallback
-                recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/${totalCards}`;
-            }
-            scrollToPageTop(); // Scroll after changing card
-        } else { console.log("Cannot go 'Next'."); }
+        if (nextButton.textContent === 'Start Over') { 
+            goToFormView(); 
+            return; 
+        }
+        
+        // Dynamic navigation: check if we can go to next card
+        if (currentRecommendations && currentCardIndex < currentRecommendations.length - 1) {
+            showCard(currentCardIndex + 1);
+        } else { 
+            console.log("Cannot go 'Next' - already at last card."); 
+        }
     });
 } else { console.error("Could not find #next-card-button element."); }
 
-// === Event Listener for the Previous Button (Using Hardcoded Index 0 as Start LIMIT) ===
-// *** WARNING: Navigation logic assumes exactly 3 recommendation cards exist ***
+// === FIXED: Dynamic Previous Button Event Listener ===
 if (prevButton) {
     prevButton.addEventListener('click', () => {
-        const cards = cardContainer?.querySelectorAll('.island-card');
-        // HARDCODED LOGIC: Only go back if index is > 0
-        if (cards && currentCardIndex > 0) {
-            cards[currentCardIndex].classList.remove('visible');
-            currentCardIndex--;
-            cards[currentCardIndex].classList.add('visible');
-            // Always enable Next button and reset text (even if it was already 'Next')
-            if (nextButton) { nextButton.textContent = 'Next'; nextButton.disabled = false; } 
-            // HARDCODED LOGIC: Hide prev button only when reaching index 0
-            if (currentCardIndex === 0) {
-                prevButton.style.display = 'none';
-                prevButton.disabled = true;
-            }
-             if(recommendationTitle) {
-                 const totalCards = currentRecommendations.length || 3; // Still uses fallback
-                 recommendationTitle.textContent = `Recommendation ${currentCardIndex + 1}/${totalCards}`;
-             }
-             scrollToPageTop(); // Scroll after changing card
-        } else { console.log("Cannot go back."); }
+        // Dynamic navigation: check if we can go to previous card
+        if (currentRecommendations && currentCardIndex > 0) {
+            showCard(currentCardIndex - 1);
+        } else { 
+            console.log("Cannot go back - already at first card."); 
+        }
     });
 } else { console.error("Could not find #prev-card-button element."); }
 

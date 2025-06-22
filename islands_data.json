@@ -1,6 +1,3 @@
-
-
-
 [
   {
     "destination": "Bora Bora, French Polynesia",
@@ -15,8 +12,8 @@
     "description": "Okay, not tropical, but showcases how descriptions work! Dramatic landscapes with rugged mountains (Cuillins), sea lochs, medieval castles (Dunvegan), and picturesque villages (Portree). Offers B&Bs, guesthouses, some boutique hotels - comfort over luxury usually. Vibe is mystical, wild, adventurous. Activities include hiking (Old Man of Storr, Quiraing), photography, exploring castles, boat trips for wildlife (puffins, seals), visiting whisky distilleries. Strong cultural history. Rustic to comfortable, definitely not a beach/palm destination!"
   },
   {
-      "destination": "Maldives", 
-      "description": "A dream destination renowned for its pristine coral reefs, crystal-clear waters, and luxurious resorts perched over the ocean. Think private islands, lavish overwater villas, and top-tier resorts (like Soneva Fushi and Anantara Veli). With an emphasis on relaxation and exclusivity, expect activities like snorkeling, diving, private beach dinners, spa treatments, and sunset cruises. Ideal for honeymooners, luxury seekers, and those looking to unwind in a tropical paradise. The vibe is serene, romantic, and indulgent, with limited adventure options beyond water activities."
+    "destination": "Maldives", 
+    "description": "A dream destination renowned for its pristine coral reefs, crystal-clear waters, and luxurious resorts perched over the ocean. Think private islands, lavish overwater villas, and top-tier resorts (like Soneva Fushi and Anantara Veli). With an emphasis on relaxation and exclusivity, expect activities like snorkeling, diving, private beach dinners, spa treatments, and sunset cruises. Ideal for honeymooners, luxury seekers, and those looking to unwind in a tropical paradise. The vibe is serene, romantic, and indulgent, with limited adventure options beyond water activities."
   },
   {
     "destination": "Seychelles", 
