@@ -1,6 +1,3 @@
-// netlify/functions/get-recommendation.js
-// Enhanced error handling for Supabase database issues
-
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 

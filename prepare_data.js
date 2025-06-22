@@ -1,8 +1,5 @@
-// prepare_data.js
-// Reads keys from .env file
-
 import fs from 'fs/promises';
-import { config } from 'dotenv'; // Load .env variables
+import { config } from 'dotenv'; 
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { createClient } from '@supabase/supabase-js';
@@ -15,17 +12,14 @@ const SOURCE_DATA_FILE = 'islands_data.json';
 const SUPABASE_TABLE_NAME = 'island_chunks';
 const CHUNK_SIZE = 500;
 const CHUNK_OVERLAP = 50;
-
-// --- Get Credentials from Environment Variables ---
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
-// Use ANON_KEY if RLS allows insert, otherwise use SERVICE_KEY for this script.
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY; // Or process.env.SUPABASE_SERVICE_KEY
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY; 
 
 // --- Validate Credentials ---
 if (!OPENAI_API_KEY || !SUPABASE_URL || !SUPABASE_KEY) {
     console.error("ERROR: Missing required environment variables (OPENAI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY/SUPABASE_SERVICE_KEY) in .env file.");
-    process.exit(1); // Stop the script
+    process.exit(1); 
 }
 
 // --- Initialize Clients ---
@@ -47,7 +41,7 @@ async function processAndEmbedData() {
         islands = JSON.parse(data);
         console.log(`Loaded ${islands.length} island descriptions from ${SOURCE_DATA_FILE}.`);
     } catch (error) {
-        console.error(`Error loading data from ${SOURCE_DATA_FILE}:`, error.message); // Log only message
+        console.error(`Error loading data from ${SOURCE_DATA_FILE}:`, error.message);
         return;
     }
 
@@ -96,11 +90,9 @@ async function processAndEmbedData() {
             const { error: insertError } = await supabase
                 .from(SUPABASE_TABLE_NAME)
                 .insert(chunksToInsert);
-
             if (insertError) {
-                // Log simplified error details
                 console.error(`  Error inserting chunks for ${island.destination}: ${insertError.message} (Code: ${insertError.code})`);
-                console.error("  Details:", insertError.details); // Include details if available
+                console.error("  Details:", insertError.details); 
             } else {
                 console.log(`  Successfully stored ${chunksToInsert.length} chunks for ${island.destination}.`);
                 totalChunksStored += chunksToInsert.length;
@@ -108,14 +100,12 @@ async function processAndEmbedData() {
         } else {
              console.log(`  No valid chunks generated or embedded for ${island.destination} to store.`);
         }
-    } // End loop through islands
-
+    }
     console.log(`--- Processing Complete ---`);
     console.log(`Total chunks created: ${totalChunksCreated}`);
     console.log(`Total chunks successfully stored: ${totalChunksStored}`);
 }
 
-// --- Run the main function ---
 processAndEmbedData().catch(error => {
     console.error("An unexpected error occurred during script execution:", error.message);
     process.exit(1);

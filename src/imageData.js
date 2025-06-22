@@ -1,6 +1,3 @@
-// src/imageData.js
-
-// Define the array of image paths
 const islandImagePaths = [
     '/images/1tropical-image.jpg',
     '/images/2tropical-image.jpg',
@@ -13,9 +10,5 @@ const islandImagePaths = [
     '/images/9tropical-image.jpg',
     '/images/10tropical-image.jpg'
 ];
-  
-  // Export the array so it can be imported elsewhere
-  export { islandImagePaths };
-  
-  // --- OR --- you can export directly:
-  // export const islandImagePaths = [ ... ];
+
+export { islandImagePaths };

@@ -1,47 +1,55 @@
-/* src/style.css */
-
-/* Reset default margins/padding for simplicity */
-body, h1, h2, h3, fieldset, div, p, form, button { /* Added button to reset */
+/* Reset default margins/padding */
+body, h1, h2, h3, fieldset, div, p, form, button {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: inherit;
 }
 
-/* Ensure html and body take full height for overlay */
 html, body {
   height: 100%;
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: sans-serif;
   line-height: 1.6;
-  background-color: #f0f4f8; /* Light background for the page */
+  background-color: #FAF0E6;
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  gap: 25px; 
+  gap: 25px;
+}
+
+h1, h2, h3, legend {
+  font-family: sans-serif;
+  font-weight: 500;
 }
 
 h1 {
   text-align: center;
-  color: #2c3e50; /* Darker blue */
+  color: #2F4F2F;
   margin-bottom: 40px;
-  font-size: 2.4rem;
+  font-size: 3.1rem;
   line-height: 2.7rem;
 }
 
-/* --- Loading Overlay Styles --- */
+legend {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #2F4F2F;
+  font-size: 1.4em;
+}
+
+/* Loading Overlay */
 .loading-overlay {
-  position: fixed; /* Cover the entire viewport */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* Keep your existing semi-transparent background */
-  background-color: rgba(0, 0, 0, 0.6); /* You might want slightly less opacity with blur */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,11 +57,8 @@ h1 {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s;
-
-  /* === ADD THESE LINES for the blur effect === */
-  -webkit-backdrop-filter: blur(8px); /* For Safari */
-  backdrop-filter: blur(8px); /* Standard syntax - Adjust '8px' as needed */
-  /* === END ADDED LINES === */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .loading-overlay.visible {
@@ -62,495 +67,66 @@ h1 {
   transition: opacity 0.4s ease-in-out, visibility 0s linear 0s;
 }
 
+.content-wrapper {
+  display: flex;
+  align-items: baseline;
+}
 
-/* --- Styles for content inside overlay --- */
-.content-wrapper { display: flex; align-items: baseline; }
-#status-words { font-size: 30px; color: #fefefe; padding-right: 10px; }
+#status-words {
+  font-size: 30px;
+  color: #fefefe;
+  padding-right: 10px;
+}
+
 .loader {
-  width: 30px; aspect-ratio: 2;
+  width: 30px;
+  aspect-ratio: 2;
   --_g: no-repeat radial-gradient(circle closest-side,#fefefe 90%,#0000);
   background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
   background-size: calc(100%/3) 50%;
   animation: l3 1s infinite linear;
   vertical-align: baseline;
 }
+
 @keyframes l3 {
-  20%{background-position:0% 0%,50% 50%,100% 50%} 40%{background-position:0% 100%,50% 0%,100% 50%}
-  60%{background-position:0% 50%,50% 100%,100% 0%} 80%{background-position:0% 50%,50% 50%,100% 100%}
+  20% { background-position: 0% 0%, 50% 50%, 100% 50%; }
+  40% { background-position: 0% 100%, 50% 0%, 100% 50%; }
+  60% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+  80% { background-position: 0% 50%, 50% 50%, 100% 100%; }
 }
 
-/* --- Form Styling --- */
+/* Form Styling */
 form#planner-form {
-  display: flex; 
-  flex-direction: column; 
+  display: block;
+  flex-direction: column;
   gap: 20px;
   padding: 40px 60px;
-  background-color: #ffffff; 
+  background-color: #F5EADD;
+  border: 1px solid #A0A08C;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  display: block;
 }
 
-fieldset { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-legend { font-weight: bold; margin-bottom: 8px; color: #34495e; font-size: 1.4em; }
-fieldset > div { display: flex; align-items: center; gap: 8px; }
-label { cursor: pointer; }
-input[type="range"] { cursor: pointer; }
-#luxury-value { font-weight: bold; color: #007bff; min-width: 20px; text-align: right; }
-button[type="submit"] {
-  padding: 12px 20px; background-color: #007bff; color: white;
-  border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em;
-  transition: background-color 0.3s ease; margin-top: 10px; width: 100%;
-}
-button[type="submit"]:hover { background-color: #0056b3; }
-
-/* --- Results Area --- */
-#results { 
-  width: 100%;
-  padding: 0 30px; 
-  margin-top: 5px;
-}
-
-/* === MODIFIED: Styling for the Results Heading Box using GRID === */
-#results-heading {
-  display: grid; /* Use Grid */
-  /* Define 3 columns: ~1/8th, auto middle, ~1/8th */
-  grid-template-columns: 1fr 6fr 1fr; /* Flexible units, maintains ratio */
-  /* Or use percentages: grid-template-columns: 12.5% auto 12.5%; */
-  align-items: center; /* Vertically center items within the row */
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f8f9fa;
-  color: #333;
-  font-size: 1.2em;
-  /* position: relative; */ /* Not needed for grid */
-}
-
-/* Styling for the Back Icon (now in grid cell 1) */
-#back-to-form-button {
-  /* grid-column: 1; */ /* Implicitly in the first column */
-  /* flex-shrink: 0; */ /* Not needed for grid */
-  justify-self: start; /* Align icon to the start of its grid cell */
-  font-size: 1.1em;
-  color: #007bff;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  transition: color 0.2s ease;
-  /* margin-right is not needed as grid handles spacing */
-}
-#back-to-form-button:hover { color: #0056b3; }
-
-/* Style for the title text span (now in grid cell 2) */
-#results-title {
-  /* grid-column: 2; */ /* Implicitly in the second column */
-  /* flex-grow: 1; */ /* Not needed for grid */
-  text-align: center; /* Center text within its grid cell */
-  /* margin: 0 auto; */ /* Alternative centering if needed */
-}
-/* === END GRID MODIFICATION === */
-
-/* Style for Dynamic Title */
-#current-recommendation-title {
-  margin-bottom: 15px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #495057;
-  text-align: center; /* Explicitly center */
-}
-
-
-/* --- Styling for Individual Island Cards --- */
-.island-card {
-  background-color: #ffffff; border: 1px solid #ddd;
-  padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  display: none; /* Hide cards by default */
-}
-.island-card.visible { display: block; }
-.island-card h3 { margin-top: 0; margin-bottom: 10px; color: #0056b3; font-size: 2.2em; }
-.island-card p.description { margin-bottom: 10px; color: #555; line-height: 1.7; }
-.island-card p.location { font-size: 0.9em; color: #777; font-style: italic; margin-bottom: 0; }
-
-/* --- Styling for Action Buttons --- */
-.full-width-button {
-  display: block; width: 100%; padding: 12px 20px; border: none;
-  border-radius: 4px; cursor: pointer; font-size: 1.1em;
-  text-align: center; transition: background-color 0.3s ease;
-}
-#next-card-button {
-  margin-top: 20px; background-color: #28a745; color: white;
-}
-#next-card-button:hover { background-color: #218838; }
-#prev-card-button {
-  margin-top: 10px; background-color: #6c757d; color: white;
-}
-#prev-card-button:hover { background-color: #5a6268; }
-
-/* --- Error Styling --- */
-.error-message {
-  color: #dc3545; background-color: #f8d7da; border: 1px solid #f5c6cb;
-  padding: 15px; border-radius: 5px; text-align: center; margin-top: 15px;
-}
-
-/* === Checkbox Chip Styling === */
-#planner-form fieldset:has(input[name="interests"]) {
-  display: flex; 
-  flex-direction: row; 
-  flex-wrap: wrap;
-  gap: 15px; 
-  border: 2px solid rgba(203, 207, 247, 0.8);  
-  padding: 14px;
-  margin-top: 15px; 
-  margin-bottom: 15px;
-}
-
-input[type="checkbox"][name="interests"] {
-  position: absolute; 
-  opacity: 0; 
-  width: 0; 
-  height: 0; 
-  pointer-events: none;
-}
-
-input[type="checkbox"][name="interests"] + label {
-  display: inline-block; 
-  padding: 8px 16px; 
-  border: 1px solid #ccc;
-  border-radius: 20px; 
-  background-color: #f8f9fa; 
-  color: #495057;
-  cursor: pointer; 
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  user-select: none;
-}
-
-input[type="checkbox"][name="interests"]:checked + label {
-  background-color: #007bff; 
-  color: white; 
-  border-color: #007bff;
-}
-
-input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
-  background-color: #e9ecef; 
-  border-color: #adb5bd;
-}
-
-#planner-form fieldset div:has(input[name="interests"]) { 
-  padding: 0; 
-  margin: 0; 
-}
-
-
-/* === Radio Button Styling === */
-#planner-form fieldset:has(input[name="vibe"]) {
-  border: 2px solid rgba(203, 207, 247, 0.8); 
-  padding: 14px; 
-  margin: 0; 
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  gap: 10px;
+}
+
+fieldset > div {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-input[type="radio"][name="vibe"] {
-  position: absolute; 
-  opacity: 0; 
-  width: 0; 
-  height: 0; 
-  pointer-events: none;
-}
-
-input[type="radio"][name="vibe"] + label {
-  display: block; 
-  width: 100%; padding: 10px 15px; 
-  border: 1px solid #ccc;
-  border-radius: 6px; 
-  background-color: #f8f9fa; 
-  color: #495057;
-  text-align: center; 
+label {
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-  user-select: none;
-}
-
-input[type="radio"][name="vibe"]:checked + label {
-  background-color: #007bff; 
-  color: white; 
-  border-color: #0056b3;
-  font-weight: bold;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-}
-
-input[type="radio"][name="vibe"]:not(:checked) + label:hover {
-  background-color: #e9ecef; border-color: #adb5bd;
-}
-#planner-form fieldset div:has(input[name="vibe"]) { padding: 0; margin: 0; }
-
-/* === Custom Range Slider Styles === */
-/* Reset only necessary parts for custom thumb */
-#luxury-scale {
-  -webkit-appearance: none;
-   appearance: none;
-   width: 100%;
-   background: transparent; /* Allow track style to show */
-   cursor: pointer;
-   outline: none;
-   margin: 5px 0;
-   height: 32px; /* Make input height match thumb for easier alignment */
-}
-/* Track Styles */
-#luxury-scale::-webkit-slider-runnable-track {
-  width: 100%; height: 10px; background: #ddd; border: none; border-radius: 5px; cursor: pointer;
-}
-#luxury-scale::-moz-range-track {
-  width: 100%; height: 10px; background: #ddd; border: none; border-radius: 5px; cursor: pointer;
-}
-/* Thumb Styles */
-#luxury-scale::-webkit-slider-thumb {
-  -webkit-appearance: none; appearance: none; margin-top: -11px; /* (10/2 - 32/2) = 5 - 16 */
-  width: 32px; height: 32px; background-color: #186604; border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out;
-}
-#luxury-scale::-webkit-slider-thumb:hover { transform: scale(1.15); }
-#luxury-scale::-moz-range-thumb {
-  width: 32px; height: 32px; background-color: #186604; border-radius: 50%; border: none;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; cursor: pointer;
-}
-#luxury-scale::-moz-range-thumb:hover { transform: scale(1.15); }
-/* Focus Styles */
-#luxury-scale:focus::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
-#luxury-scale:focus::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 3px 6px rgba(0,0,0,0.2); }
-
-/* --- Styling for Card Images --- */
-.island-card-image {
-  display: block; /* Prevents extra space below the image */
-  width: 100%; /* Make image fill card width */
-  height: 180px; /* Example fixed height - adjust as needed */
-  object-fit: cover; /* Scale image nicely, cropping if necessary */
-  object-position: center; /* Center the image within its frame */
-  border-radius: 8px 8px 0 0; /* Round top corners to match card */
-  margin-bottom: 15px; /* Space between image and heading */
-  background-color: #eee; /* Placeholder color while loading or if broken */
-}
-
-/* === Footer Styles (Example for Sticky Footer) === */
-/* These assume body/#app is flex container with min-height 100vh */
-footer {
-  color: #434343;
-  background-color: #fff;
-  text-align: center;
-  padding: 5px 0 5px 0;
-  font-size: 0.8rem;
-  margin-top: 40px; /* Or let flexbox position it */
-  flex-shrink: 0; /* Prevent footer from shrinking */
-}
-
-.slider-rating-block { display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 100px; margin-top: 5px; }
-
-
-/* === NEW: Lush Green Dominant Theme === */
-
-/* --- Base & Backgrounds --- */
-body {
-  /* Light neutral background */
-  background-color: #FAF0E6; /* Linen */
-}
-
-h1 {
-  /* Deep green for headings */
-  color: #2F4F2F; /* Dark Slate Gray */
-}
-
-form#planner-form,
-.island-card {
-  /* Light beige element background */
-  background-color: #F5EADD; /* Warm Beige */
-  /* Muted green border */
-  border: 1px solid #A0A08C; /* Muted Grey-Green */
-}
-
-legend {
-  /* Deep green for legends */
-  color: #2F4F2F; /* Dark Slate Gray */
-}
-
-/* --- Card Specific Colors --- */
-.island-card h3 {
-  /* Deep green for card titles */
-  color: #2F4F2F; /* Dark Slate Gray */
-}
-
-.island-card p.description {
-  /* Dark grey for readability */
-  color: #4A4A4A;
-}
-
-.island-card p.location {
-  /* Muted grey/green */
-  color: #6A746A; /* Adjusted slightly */
-}
-
-.island-card-image {
-    /* Light brownish placeholder */
-    background-color: #E0DBCF;
-}
-
-/* --- Form Elements & Accents (Green Focus) --- */
-
-/* Range Slider */
-#luxury-scale::-webkit-slider-runnable-track,
-#luxury-scale::-moz-range-track {
-  /* Light neutral track */
-  background: #E0DBCF;
-}
-#luxury-scale::-webkit-slider-thumb,
-#luxury-scale::-moz-range-thumb {
-  /* Primary green accent */
-  background-color: #556B2F; /* Dark Olive Green */
-}
-#luxury-scale:focus::-webkit-slider-thumb,
-#luxury-scale:focus::-moz-range-thumb {
-    /* Focus ring matching accent */
-    box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5), 0 3px 6px rgba(0,0,0,0.2);
-}
-
-/* Checkbox Chips */
-input[type="checkbox"][name="interests"] + label {
-  /* Muted green border, light background */
-  border: 1px solid #A0A08C; /* Muted Grey-Green */
-  background-color: #F5EADD; /* Warm Beige */
-  color: #2F4F2F; /* Dark Slate Gray text */
-}
-input[type="checkbox"][name="interests"]:checked + label {
-  /* Primary green accent */
-  background-color: #556B2F; /* Dark Olive Green */
-  color: white;
-  border-color: #556B2F;
-}
-input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
-  /* Slightly darker beige */
-  background-color: #E0DBCF;
-  border-color: #8A948A; /* Slightly darker grey-green */
-}
-input[type="checkbox"][name="interests"]:focus + label {
-  /* Focus matching accent */
-  outline-color: #405023; /* Darker Olive */
-  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
-}
-
-/* Radio Buttons */
-input[type="radio"][name="vibe"] + label {
-  border: 1px solid #556B2F; 
-  background-color: #F5EADD; 
-  color: #2F4F2F;
-  margin-top: 5px;
-}
-
-input[type="radio"][name="vibe"]:checked + label {
-  /* Primary green accent */
-  background-color: #556B2F; /* Dark Olive Green */
-  color: white;
-  border-color: #405023; /* Darker Olive */
-}
-input[type="radio"][name="vibe"]:not(:checked) + label:hover {
-  /* Slightly darker beige */
-  background-color: #E0DBCF;
-  border-color: #8A948A; /* Slightly darker grey-green */
-}
-input[type="radio"][name="vibe"]:focus + label {
-  /* Focus matching accent */
-  outline-color: #405023; /* Darker Olive */
-  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
-}
-
-
-/* Submit & Next Buttons (Using primary green accent) */
-button[type="submit"],
-#next-card-button {
-  /* Primary green accent */
-  background-color: #556B2F; /* Dark Olive Green */
-  color: white;
-}
-button[type="submit"]:hover,
-#next-card-button:hover {
-  /* Darker green for hover */
-  background-color: #405023; /* Darker Olive */
-}
-
-/* --- Results Area --- */
-#results-heading {
-  /* Light background, green border and text */
-  background-color: #F5EADD; /* Warm Beige */
-  border: 1px solid #A0A08C; /* Muted Grey-Green */
-  color: #2F4F2F; /* Dark Slate Gray */
-}
-
-/* Back & Prev Buttons (Using secondary, lighter green accent) */
-#back-to-form-button,
-button#back-to-form-button,
-#prev-card-button {
-  /* Lighter, muted green */
-  background-color: #8FBC8F; /* Dark Sea Green */
-  color: #1A3A1A; /* Darker green text for contrast on light green bg */
-  /* OR keep white text: color: white; */
-}
-#back-to-form-button:hover,
-button#back-to-form-button:hover,
-#prev-card-button:hover {
-  /* Slightly darker/richer sea green */
-  background-color: #709670;
-}
-/* If Back button is just icon color */
-/* #back-to-form-button { color: #8FBC8F; } */
-/* #back-to-form-button:hover { color: #709670; } */
-
-
-#current-recommendation-title {
-  /* Dark text for readability */
-  color: #2F4F2F; /* Dark Slate Gray */
-}
-
-/* --- Status & Footer --- */
-footer {
-    /* Example footer colors */
-    color: #2F4F2F; /* Dark Slate Gray */
-    background-color: #D7E0D7; /* Very light green/grey */
-}
-
-/* Error Message (Keeping earthy red/brown) */
-.error-message {
-  color: #A52A2A; /* Brown/Rust */
-  background-color: #FADBD8; /* Light Pinkish-Brown */
-  border: 1px solid #E5AAA7; /* Muted Pink/Brown */
-}
-
-
-
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@500&display=swap');
-
-
-body {
-  font-family: 'Lato', sans-serif; /* Body font */
-  /* ... other body styles */
-}
-
-h1, h2, h3, legend /* Add other header elements as needed */ {
-  font-family: 'Oswald', sans-serif; /* Header font */
-  font-weight: 500; /* Example weight */
-  /* ... other heading styles */
-}
-
-h1 {
-  font-size: 3.1rem;
-}
-
-/* Ensure buttons etc. use the body font unless overridden */
-button, input, label, select, textarea {
-    font-family: inherit; /* Inherits from body */
 }
 
 .intro-text {
-  font-family: 'Oswald', sans-serif; /* Header font */
+  font-family: 'Oswald', sans-serif;
   font-size: 1.2rem;
   line-height: 1.8rem;
   font-weight: 500;
@@ -559,18 +135,18 @@ button, input, label, select, textarea {
   border-bottom: 2px solid orange;
 }
 
-
+/* Submit Button States */
 button[type="submit"] {
-  padding: 12px 20px; 
-  border: none; 
-  border-radius: 4px; 
-  cursor: pointer; 
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   font-size: 1.1em;
-  transition: background-color 0.3s ease, color 0.3s ease; 
-  margin-top: 10px; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 10px;
   width: 100%;
-  background-color: #A0A08C; 
-  color: #F5EADD; 
+  background-color: #A0A08C;
+  color: #F5EADD;
 }
 
 button[type="submit"]:hover {
@@ -578,9 +154,352 @@ button[type="submit"]:hover {
 }
 
 button[type="submit"].ready {
-  background-color:  #2F4F2F;
+  background-color: #2F4F2F;
   color: white;
 }
+
 button[type="submit"].ready:hover {
-  background-color: #405023; 
+  background-color: #405023;
+}
+
+button, input, label, select, textarea {
+  font-family: inherit;
+}
+
+/* Range Slider */
+input[type="range"] {
+  cursor: pointer;
+}
+
+#luxury-scale {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  margin: 5px 0;
+  height: 32px;
+}
+
+#luxury-scale::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  background: #E0DBCF;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#luxury-scale::-moz-range-track {
+  width: 100%;
+  height: 10px;
+  background: #E0DBCF;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#luxury-scale::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -11px;
+  width: 32px;
+  height: 32px;
+  background-color: #556B2F;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+#luxury-scale::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+#luxury-scale::-moz-range-thumb {
+  width: 32px;
+  height: 32px;
+  background-color: #556B2F;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+#luxury-scale::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+#luxury-scale:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5), 0 3px 6px rgba(0,0,0,0.2);
+}
+
+#luxury-scale:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5), 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.slider-rating-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 100px;
+  margin-top: 5px;
+}
+
+/* Radio Button Styling */
+#planner-form fieldset:has(input[name="vibe"]) {
+  border: 2px solid rgba(203, 207, 247, 0.8);
+  padding: 14px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input[type="radio"][name="vibe"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+input[type="radio"][name="vibe"] + label {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #556B2F;
+  border-radius: 6px;
+  background-color: #F5EADD;
+  color: #2F4F2F;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  margin-top: 5px;
+}
+
+input[type="radio"][name="vibe"]:checked + label {
+  background-color: #556B2F;
+  color: white;
+  border-color: #405023;
+  font-weight: bold;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+input[type="radio"][name="vibe"]:not(:checked) + label:hover {
+  background-color: #E0DBCF;
+  border-color: #8A948A;
+}
+
+input[type="radio"][name="vibe"]:focus + label {
+  outline-color: #405023;
+  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
+}
+
+#planner-form fieldset div:has(input[name="vibe"]) {
+  padding: 0;
+  margin: 0;
+}
+
+/* Checkbox Chip Styling */
+#planner-form fieldset:has(input[name="interests"]) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  border: 2px solid rgba(203, 207, 247, 0.8);
+  padding: 14px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+input[type="checkbox"][name="interests"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+input[type="checkbox"][name="interests"] + label {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #A0A08C;
+  border-radius: 20px;
+  background-color: #F5EADD;
+  color: #2F4F2F;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  user-select: none;
+}
+
+input[type="checkbox"][name="interests"]:checked + label {
+  background-color: #556B2F;
+  color: white;
+  border-color: #556B2F;
+}
+
+input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
+  background-color: #E0DBCF;
+  border-color: #8A948A;
+}
+
+input[type="checkbox"][name="interests"]:focus + label {
+  outline-color: #405023;
+  box-shadow: 0 0 5px rgba(85, 107, 47, 0.5);
+}
+
+#planner-form fieldset div:has(input[name="interests"]) {
+  padding: 0;
+  margin: 0;
+}
+
+/* Results Area */
+#results {
+  width: 100%;
+  padding: 0 30px;
+  margin-top: 5px;
+}
+
+#results-heading {
+  display: grid;
+  grid-template-columns: 1fr 6fr 1fr;
+  align-items: center;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #A0A08C;
+  border-radius: 6px;
+  background-color: #F5EADD;
+  color: #2F4F2F;
+  font-size: 1.2em;
+}
+
+#back-to-form-button {
+  justify-self: start;
+  font-size: 1.1em;
+  color: #8FBC8F;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+  background-color: #8FBC8F;
+  color: #1A3A1A;
+}
+
+#back-to-form-button:hover {
+  background-color: #709670;
+}
+
+#results-title {
+  text-align: center;
+}
+
+#current-recommendation-title {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2F4F2F;
+  text-align: center;
+}
+
+/* Island Cards */
+.island-card {
+  background-color: #F5EADD;
+  border: 1px solid #A0A08C;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  display: none;
+}
+
+.island-card.visible {
+  display: block;
+}
+
+.island-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2F4F2F;
+  font-size: 2.2em;
+}
+
+.island-card p.description {
+  margin-bottom: 10px;
+  color: #4A4A4A;
+  line-height: 1.7;
+}
+
+.island-card p.location {
+  font-size: 0.9em;
+  color: #6A746A;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.island-card-image {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 15px;
+  background-color: #E0DBCF;
+}
+
+/* Action Buttons */
+.full-width-button {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1em;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+#next-card-button {
+  margin-top: 20px;
+  background-color: #556B2F;
+  color: white;
+}
+
+#next-card-button:hover {
+  background-color: #405023;
+}
+
+#prev-card-button {
+  margin-top: 10px;
+  background-color: #8FBC8F;
+  color: #1A3A1A;
+}
+
+#prev-card-button:hover {
+  background-color: #709670;
+}
+
+/* Error Styling */
+.error-message {
+  color: #A52A2A;
+  background-color: #FADBD8;
+  border: 1px solid #E5AAA7;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Footer */
+footer {
+  color: #2F4F2F;
+  background-color: #D7E0D7;
+  text-align: center;
+  padding: 5px 0 5px 0;
+  font-size: 0.8rem;
+  margin-top: 40px;
+  flex-shrink: 0;
 }
