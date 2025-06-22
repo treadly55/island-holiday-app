@@ -5,7 +5,6 @@ body, h1, h2, h3, fieldset, div, p, form, button { /* Added button to reset */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* Ensure button font inherits */
   font-family: inherit;
 }
 
@@ -16,24 +15,20 @@ html, body {
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  padding: 20px; /* Padding for main content, overlay ignores this */
   line-height: 1.6;
   background-color: #f0f4f8; /* Light background for the page */
 }
 
 #app {
-  max-width: 600px;
-  margin: 20px auto; /* Add some top/bottom margin */
   display: flex;
   flex-direction: column;
   gap: 25px; /* Increase space between form and results */
-  min-height: calc(100vh - 40px); /* Example for sticky footer using flex on #app */
 }
 
 h1 {
   text-align: center;
   color: #2c3e50; /* Darker blue */
-  margin-bottom: 15px;
+  margin-bottom: 40px;
   font-size: 2.4rem;
   line-height: 2.7rem;
 }
@@ -86,11 +81,15 @@ h1 {
 
 /* --- Form Styling --- */
 form#planner-form {
-  display: flex; flex-direction: column; gap: 20px;
-  border: 1px solid #ccc; padding: 20px; border-radius: 8px;
-  background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px;
+  padding: 40px 60px;
+  background-color: #ffffff; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   display: block;
 }
+
 fieldset { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 legend { font-weight: bold; margin-bottom: 8px; color: #34495e; font-size: 1.4em; }
 fieldset > div { display: flex; align-items: center; gap: 8px; }
@@ -157,8 +156,6 @@ button[type="submit"]:hover { background-color: #0056b3; }
   text-align: center; /* Explicitly center */
 }
 
-/* Container for cards */
-#card-container { }
 
 /* --- Styling for Individual Island Cards --- */
 .island-card {
@@ -194,46 +191,92 @@ button[type="submit"]:hover { background-color: #0056b3; }
 
 /* === Checkbox Chip Styling === */
 #planner-form fieldset:has(input[name="interests"]) {
-  display: flex; flex-direction: row; flex-wrap: wrap;
-  gap: 15px; border: none; padding: 0;
-  margin-top: 15px; margin-bottom: 15px;
+  display: flex; 
+  flex-direction: row; 
+  flex-wrap: wrap;
+  gap: 15px; 
+  border: 2px solid rgba(203, 207, 247, 0.8);  
+  padding: 14px;
+  margin-top: 15px; 
+  margin-bottom: 15px;
 }
+
 input[type="checkbox"][name="interests"] {
-  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+  position: absolute; 
+  opacity: 0; 
+  width: 0; 
+  height: 0; 
+  pointer-events: none;
 }
+
 input[type="checkbox"][name="interests"] + label {
-  display: inline-block; padding: 8px 16px; border: 1px solid #ccc;
-  border-radius: 20px; background-color: #f8f9fa; color: #495057;
-  cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  display: inline-block; 
+  padding: 8px 16px; 
+  border: 1px solid #ccc;
+  border-radius: 20px; 
+  background-color: #f8f9fa; 
+  color: #495057;
+  cursor: pointer; 
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   user-select: none;
 }
+
 input[type="checkbox"][name="interests"]:checked + label {
-  background-color: #007bff; color: white; border-color: #007bff;
+  background-color: #007bff; 
+  color: white; 
+  border-color: #007bff;
 }
+
 input[type="checkbox"][name="interests"]:not(:checked) + label:hover {
-  background-color: #e9ecef; border-color: #adb5bd;
+  background-color: #e9ecef; 
+  border-color: #adb5bd;
 }
-#planner-form fieldset div:has(input[name="interests"]) { padding: 0; margin: 0; }
+
+#planner-form fieldset div:has(input[name="interests"]) { 
+  padding: 0; 
+  margin: 0; 
+}
+
 
 /* === Radio Button Styling === */
 #planner-form fieldset:has(input[name="vibe"]) {
-  border: none; padding: 0; margin: 0; display: flex;
-  flex-direction: column; gap: 8px;
+  border: 2px solid rgba(203, 207, 247, 0.8); 
+  padding: 14px; 
+  margin: 0; 
+  display: flex;
+  flex-direction: column; 
+  gap: 8px;
 }
+
 input[type="radio"][name="vibe"] {
-  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+  position: absolute; 
+  opacity: 0; 
+  width: 0; 
+  height: 0; 
+  pointer-events: none;
 }
+
 input[type="radio"][name="vibe"] + label {
-  display: block; width: 100%; padding: 10px 15px; border: 1px solid #ccc;
-  border-radius: 6px; background-color: #f8f9fa; color: #495057;
-  text-align: center; cursor: pointer;
+  display: block; 
+  width: 100%; padding: 10px 15px; 
+  border: 1px solid #ccc;
+  border-radius: 6px; 
+  background-color: #f8f9fa; 
+  color: #495057;
+  text-align: center; 
+  cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
 }
+
 input[type="radio"][name="vibe"]:checked + label {
-  background-color: #007bff; color: white; border-color: #0056b3;
-  font-weight: bold; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+  background-color: #007bff; 
+  color: white; 
+  border-color: #0056b3;
+  font-weight: bold;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
+
 input[type="radio"][name="vibe"]:not(:checked) + label:hover {
   background-color: #e9ecef; border-color: #adb5bd;
 }
@@ -393,11 +436,12 @@ input[type="checkbox"][name="interests"]:focus + label {
 
 /* Radio Buttons */
 input[type="radio"][name="vibe"] + label {
-  /* Muted green border, light background */
-  border: 1px solid #A0A08C; /* Muted Grey-Green */
-  background-color: #F5EADD; /* Warm Beige */
-  color: #2F4F2F; /* Dark Slate Gray text */
+  border: 1px solid #556B2F; 
+  background-color: #F5EADD; 
+  color: #2F4F2F;
+  margin-top: 5px;
 }
+
 input[type="radio"][name="vibe"]:checked + label {
   /* Primary green accent */
   background-color: #556B2F; /* Dark Olive Green */
@@ -492,23 +536,14 @@ h1, h2, h3, legend /* Add other header elements as needed */ {
   /* ... other heading styles */
 }
 
+h1 {
+  font-size: 3.1rem;
+}
+
 /* Ensure buttons etc. use the body font unless overridden */
 button, input, label, select, textarea {
     font-family: inherit; /* Inherits from body */
 }
-
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px
-}
-
-.header-image > img {
-  max-height: 80px;
-}
-
 
 .intro-text {
   font-family: 'Oswald', sans-serif; /* Header font */
@@ -518,4 +553,30 @@ header {
   margin-bottom: 50px;
   padding-bottom: 28px;
   border-bottom: 2px solid orange;
+}
+
+
+button[type="submit"] {
+  padding: 12px 20px; 
+  border: none; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  font-size: 1.1em;
+  transition: background-color 0.3s ease, color 0.3s ease; 
+  margin-top: 10px; 
+  width: 100%;
+  background-color: #A0A08C; 
+  color: #F5EADD; 
+}
+
+button[type="submit"]:hover {
+  background-color: #8A948A;
+}
+
+button[type="submit"].ready {
+  background-color: orange;
+  color: white;
+}
+button[type="submit"].ready:hover {
+  background-color: #405023; 
 }

@@ -19,20 +19,11 @@
     </div>
 
     <div id="app">
-      <header>
-        <div class="header-text">
-          <h1>My next island holiday!</h1>
-        </div>
-        <div class="header-image">
-          <img src="/public/header-icon.png" alt="Island icon">
-        </div>
-      </header>
-
       <form id="planner-form">
-        <div class="intro-text"><p><strong>Ready for an island escape?</strong> Tell us your preferences for luxury level, vibe, and preferred activities in the form below, then press 'Find My Island!' to discover your top recommendations.</p></div>
+        <div class="intro-text"><h1>My next island holiday</h1><p><strong>Ready for an island escape but don't know where to go?</strong> Tell us your preferences for luxury level, vibe, and preferred activities and we'll find you the perfect island escape.</p></div>
      
         <fieldset> 
-          <legend>Luxury level</legend> 
+          <legend>Select luxury level</legend> 
         </fieldset>
           <input type="range" id="luxury-scale" name="luxuryScale" min="1" max="10" value="5"> 
           <div class="slider-rating-block">
@@ -41,8 +32,8 @@
             <div class="slider-rating">Luxurious</div>
           </div>
         <fieldset> 
-          <legend>Preferred Island Vibe:</legend> <div> <input type="radio" id="vibe-beach" name="vibe" value="Beach" checked> <label for="vibe-beach">Beach Focused</label> </div> <div> <input type="radio" id="vibe-jungle" name="vibe" value="Jungle"> <label for="vibe-jungle">Jungle/Rainforest</label> </div> <div> <input type="radio" id="vibe-palms" name="vibe" value="Tropical Palms"> <label for="vibe-palms">Tropical Palms & Resorts</label> </div> <div> <input type="radio" id="vibe-volcanic" name="vibe" value="Volcanic/Mountainous"> <label for="vibe-volcanic">Volcanic/Mountainous</label> </div> </fieldset>
-        <fieldset> <legend>Main Activity Interests:</legend> <div> <input type="checkbox" id="interest-relaxing" name="interests" value="Relaxing"> <label for="interest-relaxing">Relaxing / Spa</label> </div> <div> <input type="checkbox" id="interest-cultural" name="interests" value="Cultural"> <label for="interest-cultural">Cultural / Historical</label> </div> <div> <input type="checkbox" id="interest-romance" name="interests" value="Romance"> <label for="interest-romance">Romance / Couples</label> </div> <div> <input type="checkbox" id="interest-adventure" name="interests" value="Outdoor Adventure"> <label for="interest-adventure">Outdoor Adventure / Sports</label> </div> </fieldset>
+          <legend>Preferred island vibe:</legend> <div> <input type="radio" id="vibe-beach" name="vibe" value="Beach"> <label for="vibe-beach">Beach Focused</label> </div> <div> <input type="radio" id="vibe-jungle" name="vibe" value="Jungle"> <label for="vibe-jungle">Jungle/Rainforest</label> </div> <div> <input type="radio" id="vibe-palms" name="vibe" value="Tropical Palms"> <label for="vibe-palms">Tropical Palms & Resorts</label> </div> <div> <input type="radio" id="vibe-volcanic" name="vibe" value="Volcanic/Mountainous"> <label for="vibe-volcanic">Volcanic/Mountainous</label> </div> </fieldset>
+        <fieldset> <legend>Activity interests:</legend> <div> <input type="checkbox" id="interest-relaxing" name="interests" value="Relaxing"> <label for="interest-relaxing">Relaxing / Spa</label> </div> <div> <input type="checkbox" id="interest-cultural" name="interests" value="Cultural"> <label for="interest-cultural">Cultural / Historical</label> </div> <div> <input type="checkbox" id="interest-romance" name="interests" value="Romance"> <label for="interest-romance">Romance / Couples</label> </div> <div> <input type="checkbox" id="interest-adventure" name="interests" value="Outdoor Adventure"> <label for="interest-adventure">Outdoor Adventure / Sports</label> </div> </fieldset>
         <button type="submit">Find My Island!</button>
       </form>
 
@@ -55,13 +46,10 @@
         <div id="card-container">
           </div>
 
-        <button id="next-card-button" class="full-width-button" style="display: none;">Next</button>
-        <button id="prev-card-button" class="full-width-button" style="display: none;">Back</button>
+        <button id="next-card-button" class="full-width-button" style="display: none;">View Next Recommendation</button>
+        <button id="prev-card-button" class="full-width-button" style="display: none;">Previous recommendation</button>
 
       </div>
-
-      <footer>Bahama Industries </footer>
-
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

@@ -1,0 +1,5 @@
+Example code interpret this error and return message the Supabase Database project is currently paused. Please contact the developer to get them to reenable this application.
+
+index-BnnKw01B.js:1 
+ Error caught in fetch process: Error: Failed to get recommendation: Supabase RPC Error: TypeError: fetch failed (Hint: )
+    at HTMLFormElement.<anonymous> (index-BnnKw01B.js:1:3941)

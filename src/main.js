@@ -50,6 +50,29 @@ function getRandomImagePath(pathsArray) {
     return pathsArray[randomIndex];
   }
 
+// === NEW: Function to check if all form selections are complete ===
+function checkFormCompleteness() {
+    const submitButton = document.querySelector('button[type="submit"]');
+    if (!submitButton) return;
+
+    // Check if a vibe is selected
+    const vibeSelected = form.querySelector('input[name="vibe"]:checked');
+    
+    // Check if at least one interest is selected
+    const interestsSelected = form.querySelectorAll('input[name="interests"]:checked');
+    
+    // Form is complete if both vibe and at least one interest are selected
+    // (luxury scale always has a value so we don't need to check it)
+    const isComplete = vibeSelected && interestsSelected.length > 0;
+    
+    // Toggle the "ready" class based on completeness
+    if (isComplete) {
+        submitButton.classList.add('ready');
+    } else {
+        submitButton.classList.remove('ready');
+    }
+}
+
 // === Helper Function to Reset Form ===
 function resetForm() {
     // console.log("Resetting form...");
@@ -61,6 +84,9 @@ function resetForm() {
     if (errorMsgElement) errorMsgElement.remove();
     if (recommendationTitle) recommendationTitle.style.display = 'none';
     if (statusWords) statusWords.textContent = "Completing"; // Default text
+    
+    // Reset button state after form reset
+    checkFormCompleteness();
 }
 
 // === Helper Function to Set Loading Message Based on Counter ===
@@ -129,6 +155,27 @@ if (luxuryScaleInput && luxuryValueDisplay) { // Will not add listener if luxury
     if(luxuryValueDisplay) luxuryValueDisplay.textContent = event.target.value;
   });
 }
+
+// === NEW: Event Listeners for Form Completeness Checking ===
+// Listen for vibe radio button changes
+const vibeRadios = form.querySelectorAll('input[name="vibe"]');
+vibeRadios.forEach(radio => {
+    radio.addEventListener('change', checkFormCompleteness);
+});
+
+// Listen for interest checkbox changes
+const interestCheckboxes2 = form.querySelectorAll('input[name="interests"]');
+interestCheckboxes2.forEach(checkbox => {
+    checkbox.addEventListener('change', checkFormCompleteness);
+});
+
+// Also listen for luxury scale changes (though it always has a value)
+if (luxuryScaleInput) {
+    luxuryScaleInput.addEventListener('input', checkFormCompleteness);
+}
+
+// Check initial state when page loads
+document.addEventListener('DOMContentLoaded', checkFormCompleteness);
 
 // === Handle Form Submission ===
 if (form) {
