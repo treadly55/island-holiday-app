@@ -1,7 +1,13 @@
-# Island Holiday Recommendation App
+# 🌴Island Holiday Recommendation App
 
-Island Explorer is a proof-of-concept application ultizing Retrieval-Augmented Generation (RAG) techniques to transform custom data into OpenAI embeddings and using Supabase to store the chunked data. Users can then use a form to query the data and return tailored responses.
+Island Explorer is a proof-of-concept application ultizing Retrieval-Augmented Generation (RAG) techniques to transform custom data into OpenAI embeddings and using Supabase to store the chunked data. 
+
+Users can then use a form to query the data and return tailored responses.
+
 In our application example we have used data about islands as an example and allowing users to query that information via the form to return suggestions on a match for their query.
+
+## Working Example 
+https://next-island-holiday.netlify.app/
 
 ## Tech Stack
 
@@ -45,4 +51,4 @@ island-recommendation-app/
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the [MIT License](LICENSE).
