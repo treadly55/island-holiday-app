@@ -22,7 +22,7 @@ body {
 #app {
   display: flex;
   flex-direction: column;
-  gap: 25px; /* Increase space between form and results */
+  gap: 25px; 
 }
 
 h1 {
@@ -107,6 +107,7 @@ button[type="submit"]:hover { background-color: #0056b3; }
 #results { 
   width: 100%;
   padding: 0 30px; 
+  margin-top: 5px;
 }
 
 /* === MODIFIED: Styling for the Results Heading Box using GRID === */
@@ -577,7 +578,7 @@ button[type="submit"]:hover {
 }
 
 button[type="submit"].ready {
-  background-color: rgb(52, 141, 0);
+  background-color:  #2F4F2F;
   color: white;
 }
 button[type="submit"].ready:hover {
