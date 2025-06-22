@@ -1,15 +1,11 @@
 // netlify/functions/get-recommendation.js
+// Enhanced error handling for Supabase database issues
 
-// Use require for Node.js environment in Netlify Functions
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 
 // === GET ENVIRONMENT VARIABLES ===
-// These MUST be set in your Netlify site's Environment Variables settings
-// Use NON-PREFIXED names here.
 const SUPABASE_URL = process.env.SUPABASE_URL;
-// Use ANON_KEY if RLS policies allow RPC call, otherwise use SERVICE_KEY.
-// Make sure the key used here matches the one set in Netlify UI.
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -28,9 +24,102 @@ if (OPENAI_API_KEY) {
     console.error("OpenAI API Key missing in function environment.");
 }
 
-// === Core Logic Functions (Server-Side Implementation) ===
+// === NEW: Enhanced Error Detection and Classification ===
+function classifySupabaseError(error) {
+    const errorMessage = error.message || '';
+    const errorCode = error.code || '';
+    
+    console.log("Function log: Classifying error:", errorMessage);
+    
+    // Database connection/availability issues
+    if (errorMessage.includes('fetch failed') || 
+        errorMessage.includes('ECONNREFUSED') ||
+        errorMessage.includes('network error') ||
+        errorMessage.includes('connection refused')) {
+        return {
+            type: 'DATABASE_UNAVAILABLE',
+            userMessage: 'Database service is currently unavailable. Please try again later or contact support.',
+            technicalDetails: errorMessage
+        };
+    }
+    
+    // RPC function not found/disabled
+    if (errorMessage.includes('function match_island_chunks') ||
+        errorMessage.includes('does not exist') ||
+        (errorCode && errorCode.includes('42883'))) {
+        return {
+            type: 'RPC_FUNCTION_MISSING',
+            userMessage: 'Search function is not properly configured. Please contact support.',
+            technicalDetails: errorMessage
+        };
+    }
+    
+    // Authentication/permission issues
+    if (errorMessage.includes('permission denied') ||
+        errorMessage.includes('insufficient privileges') ||
+        errorMessage.includes('JWT') ||
+        errorCode === 'PGRST301') {
+        return {
+            type: 'PERMISSION_DENIED',
+            userMessage: 'Database access is restricted. Please contact support.',
+            technicalDetails: errorMessage
+        };
+    }
+    
+    // Timeout issues
+    if (errorMessage.includes('timeout') ||
+        errorMessage.includes('ETIMEDOUT')) {
+        return {
+            type: 'TIMEOUT',
+            userMessage: 'Request timed out. Please try again.',
+            technicalDetails: errorMessage
+        };
+    }
+    
+    // Generic Supabase error
+    if (errorMessage.includes('Supabase')) {
+        return {
+            type: 'SUPABASE_GENERIC',
+            userMessage: 'Database service encountered an error. Please try again later.',
+            technicalDetails: errorMessage
+        };
+    }
+    
+    // Unknown error
+    return {
+        type: 'UNKNOWN',
+        userMessage: 'An unexpected error occurred. Please try again later.',
+        technicalDetails: errorMessage
+    };
+}
 
-// Function 1: Embed Query
+// === Enhanced Error Response Helper ===
+function createErrorResponse(statusCode, errorClassification, originalError = null) {
+    const response = {
+        error: errorClassification.userMessage,
+        errorType: errorClassification.type,
+        technicalDetails: errorClassification.technicalDetails
+    };
+    
+    // Add debugging info in development/testing
+    if (process.env.NODE_ENV !== 'production') {
+        response.debug = {
+            originalError: originalError?.message || 'No original error',
+            timestamp: new Date().toISOString()
+        };
+    }
+    
+    console.error(`Function log: Returning ${errorClassification.type} error:`, response);
+    
+    return {
+        statusCode,
+        body: JSON.stringify(response),
+        headers: { 'Content-Type': 'application/json' },
+    };
+}
+
+// === Core Logic Functions (with enhanced error handling) ===
+
 async function embedQuery(queryText) {
     console.log("Function log: Embedding query:", queryText.substring(0, 50) + "...");
     if (!openai) throw new Error("OpenAI client not initialized in function.");
@@ -49,7 +138,6 @@ async function embedQuery(queryText) {
     }
 }
 
-// Function 2: Search Chunks
 async function searchChunks(queryEmbedding) {
     console.log("Function log: Searching Supabase chunks...");
     if (!supabase) throw new Error("Supabase client not initialized in function.");
@@ -58,13 +146,17 @@ async function searchChunks(queryEmbedding) {
     try {
         const { data: chunks, error } = await supabase.rpc('match_island_chunks', {
             p_query_embedding: queryEmbedding,
-            p_match_threshold: 0.75, // Similarity threshold
-            p_match_count: 3        // Number of matches
+            p_match_threshold: 0.75,
+            p_match_count: 3
         });
 
         if (error) {
             console.error("Function log: Error searching chunks RPC:", error);
-            throw new Error(`Supabase RPC Error: ${error.message} (Hint: ${error.hint})`); // Include hint if available
+            // Re-throw with enhanced error info
+            const enhancedError = new Error(`Supabase RPC Error: ${error.message}${error.hint ? ` (Hint: ${error.hint})` : ''}`);
+            enhancedError.code = error.code;
+            enhancedError.supabaseError = error;
+            throw enhancedError;
         }
 
         console.log(`Function log: Retrieved ${chunks?.length || 0} chunks.`);
@@ -75,16 +167,12 @@ async function searchChunks(queryEmbedding) {
     }
 }
 
-// Function 3: Generate Final Response (Revised Prompts)
-// This function receives relevantChunks and generates the raw string response
 async function generateFinalResponse(relevantChunks, userPreferences) {
-    console.log("Function log: Generating final recommendation (Revised Prompts)...");
+    console.log("Function log: Generating final recommendation...");
     if (!openai) throw new Error("OpenAI client not initialized in function.");
 
     if (!relevantChunks || relevantChunks.length === 0) {
         console.log("Function log: No relevant chunks provided, returning default message string.");
-        // Returning a string that looks like the expected JSON structure for consistency,
-        // although it indicates no specific match was found.
         return '```json\n[\n {\n  "country_name": "No specific match",\n  "desc": "Based on the information I have, I couldn\'t find a specific island that perfectly matches all your preferences right now. Perhaps try adjusting your selections?",\n  "country_continent_location": "Unknown"\n }\n]\n```';
     }
 
@@ -95,11 +183,7 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
     let luxuryDesc = "comfortable";
     if (userPreferences.luxuryScale <= 3) luxuryDesc = "rustic";
     else if (userPreferences.luxuryScale >= 8) luxuryDesc = "luxurious";
-    const preferencesSummaryForLog = `User looking for: ${luxuryDesc} (Scale: ${userPreferences.luxuryScale}/10), Vibe: ${userPreferences.vibe}, Interests: ${userPreferences.interests.join(', ')}.`;
-    console.log("Function log: User Preferences Summary: ", preferencesSummaryForLog);
 
-
-    // Revised System Prompt - Ask specifically for JSON output
     const systemPrompt = `You are 'Island Breeze', an enthusiastic and friendly tropical travel planner.
     Instructions:
     Based *only* on the provided context chunks, suggest three suitable island destinations that best match the user's implied needs from the context.
@@ -116,26 +200,21 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
         "country_continent_location": "Continent/Region based on context or general knowledge"
       }
     ]`;
-    // Removed the specific country_name/desc format instruction as it's now part of the JSON structure request.
 
-    // Revised User Prompt (Context only)
     const userPrompt = `Context:\n${contextString}`;
 
     console.log("Function log: Sending request to OpenAI Chat for JSON output...");
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini", // Ensure model supports JSON mode if needed, or rely on prompt.
-            // Optional: Enable JSON mode if using compatible models like gpt-4-1106-preview or gpt-3.5-turbo-1106
-            // response_format: { type: "json_object" }, // Note: Might require adjustments to prompt structure if enabled
+            model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt }
             ],
-            temperature: 0.5, // Slightly lower temperature for more predictable JSON
+            temperature: 0.5,
         });
 
-        // Return the raw content string, which should ideally be the JSON array string
         const recommendation = completion.choices[0].message.content;
         console.log("Function log: OpenAI Chat Response received.");
         return recommendation;
@@ -146,7 +225,6 @@ async function generateFinalResponse(relevantChunks, userPreferences) {
     }
 }
 
-
 // === Netlify Function Handler ===
 exports.handler = async (event, context) => {
     console.log("Function log: Handler invoked.");
@@ -154,11 +232,12 @@ exports.handler = async (event, context) => {
     // Check if clients initialized properly
      if (!supabase || !openai) {
        console.error("Function log: Server configuration error - Supabase or OpenAI client not initialized.");
-       return {
-             statusCode: 500,
-             body: JSON.stringify({ error: "Server configuration error. Please check function logs." }),
-             headers: { 'Content-Type': 'application/json' },
+       const errorClassification = {
+           type: 'SERVER_CONFIG_ERROR',
+           userMessage: 'Server configuration error. Please contact support.',
+           technicalDetails: 'Supabase or OpenAI client not initialized'
        };
+       return createErrorResponse(500, errorClassification);
      }
 
     // Only allow POST requests for this function
@@ -179,27 +258,17 @@ exports.handler = async (event, context) => {
              throw new Error("Invalid or incomplete preferences received.");
         }
 
-
-        // 2. Formulate Query Sentence (Server-side)
+        // 2. Formulate Query Sentence
         let luxuryDesc = "comfortable";
         if (preferences.luxuryScale <= 3) luxuryDesc = "rustic";
         else if (preferences.luxuryScale >= 8) luxuryDesc = "luxurious";
         const interestsString = preferences.interests.join(', ');
         const querySentence = `Seeking a ${luxuryDesc} destination with a ${preferences.vibe} vibe, interested in activities like ${interestsString}.`;
 
-
-        // 3. Run the RAG pipeline - ENSURE CORRECT ORDER AND VARIABLE NAMES
+        // 3. Run the RAG pipeline with enhanced error handling
         const queryEmbedding = await embedQuery(querySentence);
-
-        // *** ENSURE THIS LINE IS PRESENT AND CORRECT ***
         const relevantChunks = await searchChunks(queryEmbedding);
-        // *** ADDED DIAGNOSTIC LOG ***
-        console.log("Function log: searchChunks returned:", relevantChunks);
-
-        // *** ENSURE relevantChunks IS USED CORRECTLY HERE ***
         const rawRecommendationString = await generateFinalResponse(relevantChunks, preferences);
-        console.log("Function log: Received raw string from LLM.");
-
 
         // 4. Extract and Parse JSON from the raw string
         let parsedRecommendationArray;
@@ -227,20 +296,19 @@ exports.handler = async (event, context) => {
         }
 
         console.log("Function log: Recommendation parsed successfully.");
-        // 5. Return Success Response (using the PARSED array)
+        
+        // 5. Return Success Response
         return {
             statusCode: 200,
-            body: JSON.stringify({ recommendation: parsedRecommendationArray }), // Use parsed array
+            body: JSON.stringify({ recommendation: parsedRecommendationArray }),
             headers: { 'Content-Type': 'application/json' },
         };
 
-    } catch (error) { // Outer catch block catches errors from steps 1-4
+    } catch (error) {
         console.error('Function log: Error in handler:', error);
-        // Return Error Response
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: `Failed to get recommendation: ${error.message}` }), // Include error message
-            headers: { 'Content-Type': 'application/json' },
-        };
+        
+        // === NEW: Enhanced Error Classification ===
+        const errorClassification = classifySupabaseError(error);
+        return createErrorResponse(500, errorClassification, error);
     }
-}; // End of exports.handler
+};
