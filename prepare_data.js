@@ -45,7 +45,7 @@ async function processAndEmbedData() {
         return;
     }
 
-    // 2. Initialize Text Splitter
+    // 2. Initialize text splitter
     const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: CHUNK_SIZE,
         chunkOverlap: CHUNK_OVERLAP,
@@ -61,7 +61,7 @@ async function processAndEmbedData() {
             continue;
         }
 
-        // 4. Chunk Description
+        // 4. Chunk description
         const chunks = await splitter.splitText(island.description);
         console.log(`  Split into ${chunks.length} chunks.`);
         totalChunksCreated += chunks.length;
